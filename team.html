@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم فريق العمل - بوفيه زاوية شميس</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        button { background-color: #25d366; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #128c7e; }
+        .logout-btn { background-color: #ff4d4d; margin-top: 10px; }
+        .logout-btn:hover { background-color: #cc0000; }
+        .hidden { display: none; }
+        .order-card { background: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>☕ بوفيه زاوية شميس - فريق العمل</h2>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginSection" class="form-group">
+        <label for="memberName">اختر اسمك أو أدخل رقم هاتفك:</label>
+        <input type="text" id="memberName" placeholder="مثال: عابدين، شهد، مروان...">
+        <button onclick="login()" style="margin-top: 10px;">تسجيل الدخول وبدء الدوام</button>
+    </div>
+
+    <!-- لوحة التحكم وظهور الطلبات (تختفي حتى يتم تسجيل الدخول) -->
+    <div id="dashboardSection" class="hidden">
+        <p>مرحباً، <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> (متواجد الآن)</p>
+        
+        <h3>📦 الطلبات الواردة الجديدة:</h3>
+        <div id="ordersContainer">
+            <p>لا توجد طلبات جديدة حالياً...</p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">إنهاء الدوام / تسجيل الخروج</button>
+    </div>
+</div>
+
+<script>
+    function login() {
+        const name = document.getElementById('memberName').value.trim();
+        if (!name) {
+            alert('الرجاء إدخال الاسم أو رقم الهاتف للبدء');
+            return;
+        }
+
+        // حفظ اسم المستخدم في ذاكرة المتصفح المؤقتة
+        localStorage.setItem('teamMember', name);
+        
+        // إظهار لوحة التحكم وإخفاء شاشة الدخول
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        document.getElementById('welcomeUser').innerText = name;
+    }
+
+    function logout() {
+        // حذف البيانات وإنهاء الدوام
+        localStorage.removeItem('teamMember');
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('memberName').value = '';
+    }
+
+    // التحقق مما إذا كان العضو مسجلاً مسبقاً قبل تحديث الصفحة
+    window.onload = function() {
+        const savedMember = localStorage.getItem('teamMember');
+        if (savedMember) {
+            document.getElementById('memberName').value = savedMember;
+            login();
+        }
+    };
+</script>
+
+</body>
+</html>
