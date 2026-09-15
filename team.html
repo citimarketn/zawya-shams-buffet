@@ -10,7 +10,7 @@
         h2 { text-align: center; color: #333; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
         button { background-color: #25d366; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; }
         button:hover { background-color: #128c7e; }
         .logout-btn { background-color: #ff4d4d; margin-top: 10px; }
@@ -26,14 +26,20 @@
 
     <!-- شاشة تسجيل الدخول -->
     <div id="loginSection" class="form-group">
-        <label for="memberName">اختر اسمك أو أدخل رقم هاتفك:</label>
-        <input type="text" id="memberName" placeholder="مثال: عابدين، شهد، مروان...">
-        <button onclick="login()" style="margin-top: 10px;">تسجيل الدخول وبدء الدوام</button>
+        <label for="memberSelect">اختر اسمك لبدء الدوام:</label>
+        <select id="memberSelect">
+            <option value="">-- اختر اسم عضو الفريق --</option>
+            <option value="مظهر">مظهر</option>
+            <option value="حسن">حسن</option>
+            <option value="يوسف">يوسف</option>
+            <option value="كريم">كريم</option>
+        </select>
+        <button onclick="login()" style="margin-top: 15px;">تسجيل الدخول وبدء الدوام</button>
     </div>
 
     <!-- لوحة التحكم وظهور الطلبات (تختفي حتى يتم تسجيل الدخول) -->
     <div id="dashboardSection" class="hidden">
-        <p>مرحباً، <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> (متواجد الآن)</p>
+        <p>مرحباً يا <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> (متواجد الآن للعمل)</p>
         
         <h3>📦 الطلبات الواردة الجديدة:</h3>
         <div id="ordersContainer">
@@ -46,9 +52,10 @@
 
 <script>
     function login() {
-        const name = document.getElementById('memberName').value.trim();
+        const select = document.getElementById('memberSelect');
+        const name = select.value;
         if (!name) {
-            alert('الرجاء إدخال الاسم أو رقم الهاتف للبدء');
+            alert('الرجاء اختيار اسمك من القائمة للبدء');
             return;
         }
 
@@ -66,14 +73,14 @@
         localStorage.removeItem('teamMember');
         document.getElementById('dashboardSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
-        document.getElementById('memberName').value = '';
+        document.getElementById('memberSelect').value = '';
     }
 
     // التحقق مما إذا كان العضو مسجلاً مسبقاً قبل تحديث الصفحة
     window.onload = function() {
         const savedMember = localStorage.getItem('teamMember');
         if (savedMember) {
-            document.getElementById('memberName').value = savedMember;
+            document.getElementById('memberSelect').value = savedMember;
             login();
         }
     };
