@@ -841,6 +841,69 @@ async function renderTeamView(){
         return;
     }
 
+    // --- الجزء الخاص بلوحة التحكم عند تسجيل الدخول ---
+    root.innerHTML = `
+    <div class="team-bar">
+        <div class="team-bar-who">
+            <span class="avatar">${myName[0]}</span>
+            <div>
+                <div class="staff-name">${myName}</div>
+                <button class="icon-btn" style="font-size:11px;color:var(--cream-dim);padding:0;background:none;border:none;cursor:pointer" onclick="logoutTeam()">تسجيل خروج</button>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <button class="bell-btn" id="notifBellBtn" title="الطلبات والإشعارات">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span class="bell-badge" id="bellBadge" style="display:none">0</span>
+            </button>
+            <button class="duty-pill" id="dutyPil"></button>
+        </div>
+    </div>
+    <div id="dutyBanner" style="display:none;background:var(--accent-glow);color:var(--cream);padding:8px 12px;font-size:13px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1)"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;">
+        <h3 style="margin:0">طلبات الواردة</h3>
+        <button class="icon-btn" id="refreshBtn" style="font-size:12px;background:none;border:none;cursor:pointer;color:var(--accent)">تحديث</button>
+    </div>
+    <div id="ordersList"></div>`;
+
+    document.getElementById('refreshBtn').onclick = renderOrders;
+    document.getElementById('notifBellBtn').onclick = openNotifOverlay;
+    
+    const onDuty = await storageSet('zawya on duty', true);
+    const pill = document.getElementById('dutyPil');
+    const banner = document.getElementById('dutyBanner');
+    const iAmOnDuty = onDuty && onDuty.name === myName;
+    
+    pill.textContent = iAmOnDuty ? 'أنت في الخدمة الآن' : 'انضم في الخدمة الآن';
+    pill.className = 'duty-pill ' + (iAmOnDuty ? 'duty-on' : 'duty-off');
+    pill.onclick = async () => {
+        if(iAmOnDuty) await storageSet('zawya on duty', null, true);
+        else {
+            const me = TEAM.find(t => t.name === myName);
+            await storageSet('zawya on duty', {name: myName, phone: me ? me.phone : ''}, true);
+        }
+        renderTeamView();
+    };
+
+    if(onDuty && onDuty.name) {
+        banner.style.display = 'block';
+        banner.innerHTML = `في الخدمة الآن لاستقبال الطلبات والعملاء: <b>${onDuty.name}</b>`;
+    }
+
+    await renderOrders();
+    if(teamPoll) clearInterval(teamPoll);
+    teamPoll = setInterval(() => {
+        if(document.getElementById('teamview').style.display !== 'none') renderOrders();
+    }, 9000);
+}
+
+async function logoutTeam(){
+    await storageSet('zawya_my_name', null, false);
+    localStorage.removeItem('zawya_my_name');
+    myName = null;
+    renderTeamView();
+}
+
   root.innerHTML = `
     <div class="team-bar">
       <div class="team-bar-who">
