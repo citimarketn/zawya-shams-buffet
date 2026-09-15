@@ -1096,39 +1096,53 @@ function openNotifOverlay(){
 function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
 
 async function renderNotifOverlay(){
-  const list = (await storageGet('zawya_orders', true)) || [];
-  const body = document.getElementById('notifBody');
-  if(!list.length){
-    body.innerHTML = `<div class="empty-state"><div>لا توجد أي طلبات بعد</div></div>`;
-    return;
-  }
-  body.innerHTML = '';
-  list.forEach(order=>{
-    const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
-    const timeStr = new Date(order.time).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-    const card = document.createElement('div');
-    card.className = 'order-card';
-    card.innerHTML = `
-      <div class="order-head"><span class="status-badge ${st.cls}">${st.text}</span><span class="order-id">${timeStr} · #${order.id.slice(-5)}</span></div>
-      <div class="order-customer">${order.customer}</div>
-      <ul class="order-items">${order.items.map(i=>{ const bits=[i.extra,i.sugar].filter(Boolean).join('، '); return `<li><b>${i.name}</b> ×${i.qty}${bits? ' — '+bits:''}</li>`; }).join('')}</ul>
-    `;
-    if(order.history && order.history.length){
-      const hist = document.createElement('ul');
-      hist.className = 'order-items';
-      hist.style.marginTop = '4px';
-      hist.style.borderTop = '1px dashed rgba(32,41,31,.12)';
-      hist.style.paddingTop = '6px';
-      order.history.forEach(h=>{
-        const li = document.createElement('li');
-        li.textContent = historyLine(h);
-        hist.appendChild(li);
-      });
-      card.appendChild(hist);
+    const list = (await storageGet('zawya_orders', true)) || [];
+    const body = document.getElementById('notiBody');
+    if(!body) return;
+    
+    if(!list.length){
+        body.innerHTML = '<div class="empty-state">لا يوجد أي طلبات بعد</div>';
+        return;
     }
-    body.appendChild(card);
-  });
-}
+    
+    body.innerHTML = '';
+    list.forEach(order => {
+        const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
+        const timestr = new Date(order.time).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        
+        let itemsHtml = '';
+        if (order.items && Array.isArray(order.items)) {
+            itemsHtml = order.items.map(i => {
+                const extras = [i.extra, i.sugar].filter(Boolean).join(' - ');
+                return `<li><b>${i.name}</b> x${i.qty} ${extras ? `(${extras})` : ''}</li>`;
+            }).join('');
+        }
+
+        card.innerHTML = `
+            <div class="order-head">
+                <span class="status-badge ${st.cls}">${st.text}</span>
+                <span class="order-id">${timestr} - #${order.id ? order.id.slice(-5) : ''}</span>
+            </div>
+            <div class="order-customer">${order.customer || 'عميل'}</div>
+            <ul class="order-items">${itemsHtml}</ul>
+        `;
+        
+        if(order.history && order.history.length){
+            const hist = document.createElement('ul');
+            hist.className = 'order-items';
+            hist.style.marginTop = '4px';
+            hist.style.borderTop = '1px dashed rgba(32,41,31,.12)';
+            hist.style.paddingTop = '6px';
+            order.history.forEach(h => {
+                const li = document.createElement('li');
+                li.textContent = `${h.action}: ${h.by}`;
+                hist.appendChild(li);
+            });
+            card.appendChild(hist);
+        }
+        body.appendChild(card);
 
 async function updateOrder(orderId, action, extra){
   const list = (await storageGet('zawya_orders', true)) || [];
