@@ -407,7 +407,7 @@
 <script>
 /* ===================== DATA ===================== */
 const TEAM = [
-  { name:'عابدين علي', phone:'201021776980' },
+  { name:'مظهر علي', phone:'201021776980' },
   { name:'حسن ابو عمر', phone:'201220522806' },
   { name:'كريم أحمد', phone:'201200615796' },
 ];
@@ -800,109 +800,26 @@ document.getElementById('decorWaBtn').onclick = quickWaContact;
 let teamPoll = null;
 
 async function renderTeamView(){
-    myName = await storageSet('zawya_my_name', null, true) || localStorage.getItem('zawya_my_name');
-    const root = document.getElementById('teamview');
-    if(!root) return;
+  myName = await storageGet('zawya_my_name', false);
+  const root = document.getElementById('teamView');
 
-    if(!myName){
-        root.innerHTML = `
-        <div class="team-login">
-            <h3 style="margin:0 0 4px">تسجيل الدخول لفريق العمل</h3>
-            <p style="color:var(--cream-dim);font-size:13px;margin:0">اختر اسمك لمعرفة الطلبات واستلامها</p>
-            <div class="staff-pick" id="staffPick"></div>
-        </div>`;
-        
-        const pick = document.getElementById('staffPick');
-        if(pick) {
-            pick.innerHTML = '';
-            TEAM.forEach(m => {
-                const b = document.createElement('button');
-                b.type = 'button';
-                b.className = 'staff-btn';
-                b.style.cursor = 'pointer';
-                b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone||''}</div></span>`;
-
-                b.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log("تم النقر على العضو:", m.name);
-                    try {
-                        await storageSet('zawya_my_name', m.name, false);
-                        localStorage.setItem('zawya_my_name', m.name);
-                        myName = m.name;
-                        renderTeamView();
-                    } catch (err) {
-                        console.error("خطأ أثناء تسجيل الدخول:", err);
-                    }
-                });
-                pick.appendChild(b);
-            });
-        }
-        return;
-    }
-
-    // --- الجزء الخاص بلوحة التحكم عند تسجيل الدخول ---
+  if(!myName){
     root.innerHTML = `
-    <div class="team-bar">
-        <div class="team-bar-who">
-            <span class="avatar">${myName[0]}</span>
-            <div>
-                <div class="staff-name">${myName}</div>
-                <button class="icon-btn" style="font-size:11px;color:var(--cream-dim);padding:0;background:none;border:none;cursor:pointer" onclick="logoutTeam()">تسجيل خروج</button>
-            </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-            <button class="bell-btn" id="notifBellBtn" title="الطلبات والإشعارات">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <span class="bell-badge" id="bellBadge" style="display:none">0</span>
-            </button>
-            <button class="duty-pill" id="dutyPil"></button>
-        </div>
-    </div>
-    <div id="dutyBanner" style="display:none;background:var(--accent-glow);color:var(--cream);padding:8px 12px;font-size:13px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.1)"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;">
-        <h3 style="margin:0">طلبات الواردة</h3>
-        <button class="icon-btn" id="refreshBtn" style="font-size:12px;background:none;border:none;cursor:pointer;color:var(--accent)">تحديث</button>
-    </div>
-    <div id="ordersList"></div>`;
-
-    document.getElementById('refreshBtn').onclick = renderOrders;
-    document.getElementById('notifBellBtn').onclick = openNotifOverlay;
-    
-    const onDuty = await storageSet('zawya on duty', true);
-    const pill = document.getElementById('dutyPil');
-    const banner = document.getElementById('dutyBanner');
-    const iAmOnDuty = onDuty && onDuty.name === myName;
-    
-    pill.textContent = iAmOnDuty ? 'أنت في الخدمة الآن' : 'انضم في الخدمة الآن';
-    pill.className = 'duty-pill ' + (iAmOnDuty ? 'duty-on' : 'duty-off');
-    pill.onclick = async () => {
-        if(iAmOnDuty) await storageSet('zawya on duty', null, true);
-        else {
-            const me = TEAM.find(t => t.name === myName);
-            await storageSet('zawya on duty', {name: myName, phone: me ? me.phone : ''}, true);
-        }
-        renderTeamView();
-    };
-
-    if(onDuty && onDuty.name) {
-        banner.style.display = 'block';
-        banner.innerHTML = `في الخدمة الآن لاستقبال الطلبات والعملاء: <b>${onDuty.name}</b>`;
-    }
-
-    await renderOrders();
-    if(teamPoll) clearInterval(teamPoll);
-    teamPoll = setInterval(() => {
-        if(document.getElementById('teamview').style.display !== 'none') renderOrders();
-    }, 9000);
-}
-
-async function logoutTeam(){
-    await storageSet('zawya_my_name', null, false);
-    localStorage.removeItem('zawya_my_name');
-    myName = null;
-    renderTeamView();
-}
+      <div class="team-login">
+        <h3 style="margin:0 0 4px">تسجيل الدخول لفريق العمل</h3>
+        <p style="color:var(--cream-dim);font-size:13px;margin:0">اختر اسمك لعرض الطلبات واستلامها</p>
+        <div class="staff-pick" id="staffPick"></div>
+      </div>`;
+    const pick = document.getElementById('staffPick');
+    TEAM.forEach(m=>{
+      const b = document.createElement('button');
+      b.className = 'staff-btn';
+      b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone.replace('20','0')}</div></span>`;
+      b.onclick = async ()=>{ await storageSet('zawya_my_name', m.name, false); myName = m.name; renderTeamView(); };
+      pick.appendChild(b);
+    });
+    return;
+  }
 
   root.innerHTML = `
     <div class="team-bar">
@@ -1096,53 +1013,39 @@ function openNotifOverlay(){
 function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
 
 async function renderNotifOverlay(){
-    const list = (await storageGet('zawya_orders', true)) || [];
-    const body = document.getElementById('notiBody');
-    if(!body) return;
-    
-    if(!list.length){
-        body.innerHTML = '<div class="empty-state">لا يوجد أي طلبات بعد</div>';
-        return;
+  const list = (await storageGet('zawya_orders', true)) || [];
+  const body = document.getElementById('notifBody');
+  if(!list.length){
+    body.innerHTML = `<div class="empty-state"><div>لا توجد أي طلبات بعد</div></div>`;
+    return;
+  }
+  body.innerHTML = '';
+  list.forEach(order=>{
+    const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
+    const timeStr = new Date(order.time).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    card.innerHTML = `
+      <div class="order-head"><span class="status-badge ${st.cls}">${st.text}</span><span class="order-id">${timeStr} · #${order.id.slice(-5)}</span></div>
+      <div class="order-customer">${order.customer}</div>
+      <ul class="order-items">${order.items.map(i=>{ const bits=[i.extra,i.sugar].filter(Boolean).join('، '); return `<li><b>${i.name}</b> ×${i.qty}${bits? ' — '+bits:''}</li>`; }).join('')}</ul>
+    `;
+    if(order.history && order.history.length){
+      const hist = document.createElement('ul');
+      hist.className = 'order-items';
+      hist.style.marginTop = '4px';
+      hist.style.borderTop = '1px dashed rgba(32,41,31,.12)';
+      hist.style.paddingTop = '6px';
+      order.history.forEach(h=>{
+        const li = document.createElement('li');
+        li.textContent = historyLine(h);
+        hist.appendChild(li);
+      });
+      card.appendChild(hist);
     }
-    
-    body.innerHTML = '';
-    list.forEach(order => {
-        const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
-        const timestr = new Date(order.time).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
-        const card = document.createElement('div');
-        card.className = 'order-card';
-        
-        let itemsHtml = '';
-        if (order.items && Array.isArray(order.items)) {
-            itemsHtml = order.items.map(i => {
-                const extras = [i.extra, i.sugar].filter(Boolean).join(' - ');
-                return `<li><b>${i.name}</b> x${i.qty} ${extras ? `(${extras})` : ''}</li>`;
-            }).join('');
-        }
-
-        card.innerHTML = `
-            <div class="order-head">
-                <span class="status-badge ${st.cls}">${st.text}</span>
-                <span class="order-id">${timestr} - #${order.id ? order.id.slice(-5) : ''}</span>
-            </div>
-            <div class="order-customer">${order.customer || 'عميل'}</div>
-            <ul class="order-items">${itemsHtml}</ul>
-        `;
-        
-        if(order.history && order.history.length){
-            const hist = document.createElement('ul');
-            hist.className = 'order-items';
-            hist.style.marginTop = '4px';
-            hist.style.borderTop = '1px dashed rgba(32,41,31,.12)';
-            hist.style.paddingTop = '6px';
-            order.history.forEach(h => {
-                const li = document.createElement('li');
-                li.textContent = `${h.action}: ${h.by}`;
-                hist.appendChild(li);
-            });
-            card.appendChild(hist);
-        }
-        body.appendChild(card);
+    body.appendChild(card);
+  });
+}
 
 async function updateOrder(orderId, action, extra){
   const list = (await storageGet('zawya_orders', true)) || [];
@@ -1151,6 +1054,7 @@ async function updateOrder(orderId, action, extra){
   const order = list[idx];
   if(!order.history) order.history = [];
   const time = new Date().toISOString();
+
   if(action==='done'){
     order.status='done';
     order.history.push({action:'done', by:myName, time});
@@ -1212,62 +1116,23 @@ function showInfo(type){
 const footerYearEl = document.getElementById('footerYear');
 if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 // دالة إرسال الطلب إلى قاعدة البيانات Firestore
-let assignedWhatsapp = "";
 async function submitOrderToFirebase(customerName, orderDetails) {
     try {
-        const teamRef = collection(db, "team_members");
-        const q = query(teamRef, where("isOnline", "==", true));
-        const querySnapshot = await getDocs(q);
-
-        let onlineMembers = [];
-        querySnapshot.forEach((doc) => {
-            onlineMembers.push(doc.data());
-        });
-
-        let assignedName = "غير محدد";
-        let assignedWhatsapp = "";
-
-        if (onlineMembers.length > 0) {
-            const randomIndex = Math.floor(Math.random() * onlineMembers.length);
-            assignedName = onlineMembers[randomIndex].name;
-            assignedWhatsapp = onlineMembers[randomIndex].whatsapp;
-        }
-
         const docRef = await addDoc(collection(db, "orders"), {
             customerName: customerName,
             orderDetails: orderDetails,
-            assignedTo: assignedName,
-            assignedWhatsapp: assignedWhatsapp,
-            status: 'جديد',
             createdAt: serverTimestamp()
         });
-
-        console.log("تم إرسال الطلب برقم: ", docRef.id);
-        alert(`تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً عن طريق: ${assignedName}`);
-        
+        console.log("تم إرسال الطلب بنجاح برقم: ", docRef.id);
+        alert("تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً.");
     } catch (e) {
         console.error("خطأ أثناء إرسال الطلب: ", e);
         alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.");
     }
 }
-
-function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    const target = document.getElementById(tabId);
-    if(target) target.style.display = 'block';
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    if (typeof renderCategories === "function") {
-        renderCategories();
-    }
-    if (typeof renderCartPanel === "function") {
-        renderCartPanel();
-    }
-    if (typeof renderTeamView === "function") {
-        renderTeamView();
-    }
-});
+/* ===================== INIT ===================== */
+renderCategories();
+renderCartPanel();
 </script>
 </body>
 </html>

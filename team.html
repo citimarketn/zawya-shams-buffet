@@ -10,15 +10,13 @@
         h2 { text-align: center; color: #333; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        select, input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-bottom: 10px; }
+        select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
         button { background-color: #25d366; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; }
         button:hover { background-color: #128c7e; }
-        .logout-btn { background-color: #ff4d4d; margin-top: 15px; }
+        .logout-btn { background-color: #ff4d4d; margin-top: 10px; }
         .logout-btn:hover { background-color: #cc0000; }
         .hidden { display: none; }
         .order-card { background: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-        .online-dot { height: 12px; width: 12px; background-color: #25d366; border-radius: 50%; display: inline-block; margin-left: 5px; }
-        .team-status-list { background: #e9ecef; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -26,129 +24,84 @@
 <div class="container">
     <h2>☕ بوفيه زاوية شميس - فريق العمل</h2>
 
-    <!-- شاشة تسجيل الدخول برقم الواتساب وكلمة السر (4 أرقام) -->
+    <!-- شاشة تسجيل الدخول -->
     <div id="loginSection" class="form-group">
-        <label for="memberSelect">اختر اسمك:</label>
+        <label for="memberSelect">اختر اسمك لبدء الدوام:</label>
         <select id="memberSelect">
             <option value="">-- اختر اسم عضو الفريق --</option>
-            <option value="عابدين">عابدين</option>
+            <option value="مظهر">مظهر</option>
             <option value="حسن">حسن</option>
             <option value="يوسف">يوسف</option>
             <option value="كريم">كريم</option>
         </select>
-
-        <label for="whatsappInput">رقم الواتساب:</label>
-        <input type="text" id="whatsappInput" placeholder="مثال: 01000000000">
-
-        <label for="pinInput">كلمة السر (4 أرقام):</label>
-        <input type="password" id="pinInput" maxlength="4" placeholder="****">
-
-        <button onclick="handleLogin()" style="margin-top: 10px;">تسجيل الدخول وبدء الدوام</button>
+        <button onclick="login()" style="margin-top: 15px;">تسجيل الدخول وبدء الدوام</button>
     </div>
 
     <!-- لوحة التحكم وظهور الطلبات (تختفي حتى يتم تسجيل الدخول) -->
     <div id="dashboardSection" class="hidden">
-        <p>مرحباً يا <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> <span class="online-dot"></span> (متواجد الآن للعمل)</p>
+        <p>مرحباً يا <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> (متواجد الآن للعمل)</p>
         
-        <div class="team-status-list">
-            <strong>حالة الفريق المتاحة:</strong>
-            <div id="teamStatusContainer">جارٍ تحميل حالة الفريق...</div>
-        </div>
-
         <h3>📦 الطلبات الواردة الجديدة:</h3>
         <div id="ordersContainer">
             <p>جارٍ تحميل الطلبات الحية...</p>
         </div>
 
-        <button class="logout-btn" onclick="handleLogout()">إنهاء الدوام / تسجيل الخروج</button>
+        <button class="logout-btn" onclick="logout()">إنهاء الدوام / تسجيل الخروج</button>
     </div>
 </div>
 
-<!-- ربط ملف التكوين الخارجي Firebase Config وزر دخول وخروج الفريق -->
-<script type="module">
-    import { db } from "./firebase-config.js";
-    import { collection, doc, setDoc, getDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    window.handleLogin = async function() {
-        const name = document.getElementById('memberSelect').value;
-        const whatsapp = document.getElementById('whatsappInput').value.trim();
-        const pin = document.getElementById('pinInput').value.trim();
-
-        if (!name || !whatsapp || pin.length !== 4) {
-            alert('الرجاء اختيار الاسم، ادخال رقم الواتساب، وكلمة السر المكونة من 4 أرقام بدقة.');
+<script>
+    function login() {
+        const select = document.getElementById('memberSelect');
+        const name = select.value;
+        if (!name) {
+            alert('الرجاء اختيار اسمك من القائمة للبدء');
             return;
         }
 
-        try {
-            const memberRef = doc(db, "team_members", name);
-            const memberSnap = await getDoc(memberRef);
-
-            if (memberSnap.exists()) {
-                const data = memberSnap.data();
-                if (data.pin && data.pin !== pin) {
-                    alert('كلمة السر غير صحيحة!');
-                    return;
-                }
-            }
-
-            // حفظ البيانات وتحديث حالة الاتصال في فايربيس
-            await setDoc(memberRef, {
-                name: name,
-                whatsapp: whatsapp,
-                pin: pin,
-                isOnline: true,
-                lastLogin: new Date()
-            }, { merge: true });
-
-            // حفظ في التخزين المؤقت المحلي للجهاز
-            localStorage.setItem('teamMember', name);
-            localStorage.setItem('teamWhatsapp', whatsapp);
-
-            showDashboard(name);
-        } catch (error) {
-            console.error("خطأ في تسجيل الدخول:", error);
-            alert('حدث خطأ أثناء الاتصال بقاعدة البيانات.');
-        }
-    };
-
-    window.handleLogout = async function() {
-        const name = localStorage.getItem('teamMember');
-        if (name) {
-            try {
-                const memberRef = doc(db, "team_members", name);
-                await updateDoc(memberRef, { isOnline: false });
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        localStorage.removeItem('teamMember');
-        localStorage.removeItem('teamWhatsapp');
+        // حفظ اسم المستخدم في ذاكرة المتصفح المؤقتة
+        localStorage.setItem('teamMember', name);
         
+        // إظهار لوحة التحكم وإخفاء شاشة الدخول
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        document.getElementById('welcomeUser').innerText = name;
+    }
+
+    function logout() {
+        // حذف البيانات وإنهاء الدوام
+        localStorage.removeItem('teamMember');
         document.getElementById('dashboardSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
         document.getElementById('memberSelect').value = '';
-        document.getElementById('whatsappInput').value = '';
-        document.getElementById('pinInput').value = '';
-    };
-
-    function showDashboard(name) {
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-        document.getElementById('welcomeUserinnerText') || (document.getElementById('welcomeUser').innerText = name);
     }
 
-    // الاستماع الفوري لحالة أعضاء الفريق (لتحديث النقاط الخضراء)
-    onSnapshot(collection(db, "team_members"), (snapshot) => {
-        let teamHtml = '';
-        snapshot.forEach((doc) => {
-            const member = doc.data();
-            const dotColor = member.isOnline ? '#25d366' : '#ccc';
-            const statusText = member.isOnline ? 'متواجد' : 'غير متواجد';
-            teamHtml += `<span style="margin-left: 15px;">${member.name} <span style="height:10px; width:10px; background-color:${dotColor}; border-radius:50%; display:inline-block;"></span> <small>(${statusText})</small></span>`;
-        });
-        document.getElementById('teamStatusContainer').innerHTML = teamHtml || 'لا يوجد أعضاء مسجلين.';
-    });
+    // التحقق مما إذا كان العضو مسجلاً مسبقاً قبل تحديث الصفحة
+    window.onload = function() {
+        const savedMember = localStorage.getItem('teamMember');
+        if (savedMember) {
+            document.getElementById('memberSelect').value = savedMember;
+            login();
+        }
+    };
+</script>
+
+<!-- اتصال Firebase والاستماع للطلبات لحظياً -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     // تفعيل الاستماع الحي للطلبات (onSnapshot)
     try {
@@ -163,30 +116,20 @@
             let html = '';
             snapshot.forEach((doc) => {
                 const order = doc.data();
-                const orderTime = order.createdAt?.toDate ? new Date(order.createdAt.toDate()).toLocaleTimeString('ar-EG') : '';
                 html += `
                     <div class="order-card">
                         <strong>العميل:</strong> ${order.customerName || 'غير معروف'} <br>
                         <strong>الطلب:</strong> ${order.orderDetails || ''} <br>
-                        <strong>المسؤول المعين:</strong> ${order.assignedTo || 'قيد التوزيع...'} <br>
-                        <small style="color: #666;">الوقت: ${orderTime}</small>
+                        <small style="color: #666;">الوقت: ${new Date(order.createdAt?.toDate()).toLocaleTimeString('ar-EG') || ''}</small>
                     </div>
                 `;
             });
             container.innerHTML = html;
         });
+        console.log("تم تفعيل مستمع الطلبات الحية بنجاح");
     } catch (error) {
         console.error("خطأ في جلب الطلبات:", error);
     }
-
-    // التحقق التلقائي عند فتح الصفحة إذا كان مسجلاً من قبل
-    window.onload = function() {
-        const savedMember = localStorage.getItem('teamMember');
-        if (savedMember) {
-            document.getElementById('memberSelect').value = savedMember;
-            showDashboard(savedMember);
-        }
-    };
 </script>
 
 </body>
