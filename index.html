@@ -1237,7 +1237,11 @@ async function submitOrderToFirebase(customerName, orderDetails) {
     }
 }
 
-
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    const target = document.getElementById(tabId);
+    if(target) target.style.display = 'block';
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof renderCategories === "function") {
