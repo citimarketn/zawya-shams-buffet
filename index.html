@@ -1116,23 +1116,44 @@ function showInfo(type){
 const footerYearEl = document.getElementById('footerYear');
 if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 // دالة إرسال الطلب إلى قاعدة البيانات Firestore
+let assignedWhatsapp = "";
 async function submitOrderToFirebase(customerName, orderDetails) {
     try {
+        const teamRef = collection(db, "team_members");
+        const q = query(teamRef, where("isOnline", "==", true));
+        const querySnapshot = await getDocs(q);
+
+        let onlineMembers = [];
+        querySnapshot.forEach((doc) => {
+            onlineMembers.push(doc.data());
+        });
+
+        let assignedName = "غير محدد";
+        let assignedWhatsapp = "";
+
+        if (onlineMembers.length > 0) {
+            const randomIndex = Math.floor(Math.random() * onlineMembers.length);
+            assignedName = onlineMembers[randomIndex].name;
+            assignedWhatsapp = onlineMembers[randomIndex].whatsapp;
+        }
+
         const docRef = await addDoc(collection(db, "orders"), {
             customerName: customerName,
             orderDetails: orderDetails,
+            assignedTo: assignedName,
+            assignedWhatsapp: assignedWhatsapp,
+            status: 'جديد',
             createdAt: serverTimestamp()
         });
-        console.log("تم إرسال الطلب بنجاح برقم: ", docRef.id);
-        alert("تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً.");
+
+        console.log("تم إرسال الطلب برقم: ", docRef.id);
+        alert(`تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً عن طريق: ${assignedName}`);
+        
     } catch (e) {
         console.error("خطأ أثناء إرسال الطلب: ", e);
         alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.");
     }
 }
-/* ===================== INIT ===================== */
-renderCategories();
-renderCartPanel();
 </script>
 </body>
 </html>
