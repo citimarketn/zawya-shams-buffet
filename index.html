@@ -1156,13 +1156,15 @@ async function submitOrderToFirebase(customerName, orderDetails) {
 
 
 
-// تشغيل الأقسام وعرض القائمة تلقائياً عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof renderCategories === "function") {
         renderCategories();
     }
     if (typeof renderCartPanel === "function") {
         renderCartPanel();
+    }
+    if (typeof renderTeamView === "function") {
+        renderTeamView();
     }
 });
 </script>
