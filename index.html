@@ -816,21 +816,13 @@ async function renderTeamView(){
       b.className = 'staff-btn';
       b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone.replace('20','0')}</div></span>`;
       b.onclick = async () => { 
-    await storageSet('zawya_my_name', m.name, false); 
-    myName = m.name; 
-    
-    // إرسال حالة الاتصال إلى فايربيس فور تسجيل الدخول
     try {
-        await setDoc(doc(db, "team_status", m.name), {
-            الاسم: m.name,
-            صحيح: "متصل بالإنترنت",
-            آخر_تسجيل_دخول: new Date().toLocaleString('ar-EG', { timeZone: 'Africa/Cairo' })
-        }, { merge: true });
+        await storageSet('zawya_my_name', m.name, false); 
+        myName = m.name; 
+        renderTeamView(); 
     } catch (err) {
-        console.error("خطأ في تحديث حالة الاتصال:", err);
+        console.error("خطأ أثناء تسجيل الدخول:", err);
     }
-    
-    renderTeamView(); 
 };
       pick.appendChild(b);
     });
