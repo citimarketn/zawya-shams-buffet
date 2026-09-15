@@ -1054,7 +1054,6 @@ async function updateOrder(orderId, action, extra){
   const order = list[idx];
   if(!order.history) order.history = [];
   const time = new Date().toISOString();
-
   if(action==='done'){
     order.status='done';
     order.history.push({action:'done', by:myName, time});
@@ -1154,6 +1153,18 @@ async function submitOrderToFirebase(customerName, orderDetails) {
         alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.");
     }
 }
+
+
+
+// تشغيل الأقسام وعرض القائمة تلقائياً عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof renderCategories === "function") {
+        renderCategories();
+    }
+    if (typeof renderCartPanel === "function") {
+        renderCartPanel();
+    }
+});
 </script>
 </body>
 </html>
