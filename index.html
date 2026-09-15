@@ -730,7 +730,21 @@ function renderCartPanel(){
   }
   document.getElementById('sendOrderBtn').disabled = cart.length===0;
 }
-
+// ربط زر إرسال الطلب بدالة الفايربيس
+document.getElementById('sendOrderBtn').addEventListener('click', () => {
+    if (cart.length === 0) return;
+    
+    // تجميع تفاصيل الطلب وأسماء العناصر لإرسالها
+    const orderDetails = cart.map(item => `${item.name} (الكمية: ${item.qty})`).join(', ');
+    const customerName = "عميل بوفيه زاوية شميس"; // أو يمكنك جعله يكتب اسمه إذا أردت
+    
+    // استدعاء دالة الإرسال لـ Firebase
+    submitOrderToFirebase(customerName, orderDetails);
+    
+    // تفريغ السلة وتحديث الواجهة بعد الإرسال الناجح
+    cart = [];
+    renderCartPanel();
+});
 document.getElementById('cartPanelHead').addEventListener('click', ()=>{
   document.getElementById('cartPanel').classList.toggle('open');
 });
@@ -1101,7 +1115,21 @@ function showInfo(type){
 
 const footerYearEl = document.getElementById('footerYear');
 if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
-
+// دالة إرسال الطلب إلى قاعدة البيانات Firestore
+async function submitOrderToFirebase(customerName, orderDetails) {
+    try {
+        const docRef = await addDoc(collection(db, "orders"), {
+            customerName: customerName,
+            orderDetails: orderDetails,
+            createdAt: serverTimestamp()
+        });
+        console.log("تم إرسال الطلب بنجاح برقم: ", docRef.id);
+        alert("تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً.");
+    } catch (e) {
+        console.error("خطأ أثناء إرسال الطلب: ", e);
+        alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.");
+    }
+}
 /* ===================== INIT ===================== */
 renderCategories();
 renderCartPanel();

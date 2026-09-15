@@ -43,7 +43,7 @@
         
         <h3>📦 الطلبات الواردة الجديدة:</h3>
         <div id="ordersContainer">
-            <p>لا توجد طلبات جديدة حالياً...</p>
+            <p>جارٍ تحميل الطلبات الحية...</p>
         </div>
 
         <button class="logout-btn" onclick="logout()">إنهاء الدوام / تسجيل الخروج</button>
@@ -84,6 +84,52 @@
             login();
         }
     };
+</script>
+
+<!-- اتصال Firebase والاستماع للطلبات لحظياً -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // تفعيل الاستماع الحي للطلبات (onSnapshot)
+    try {
+        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const container = document.getElementById('ordersContainer');
+            if (snapshot.empty) {
+                container.innerHTML = '<p>لا توجد طلبات جديدة حالياً...</p>';
+                return;
+            }
+            
+            let html = '';
+            snapshot.forEach((doc) => {
+                const order = doc.data();
+                html += `
+                    <div class="order-card">
+                        <strong>العميل:</strong> ${order.customerName || 'غير معروف'} <br>
+                        <strong>الطلب:</strong> ${order.orderDetails || ''} <br>
+                        <small style="color: #666;">الوقت: ${new Date(order.createdAt?.toDate()).toLocaleTimeString('ar-EG') || ''}</small>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        });
+        console.log("تم تفعيل مستمع الطلبات الحية بنجاح");
+    } catch (error) {
+        console.error("خطأ في جلب الطلبات:", error);
+    }
 </script>
 
 </body>
