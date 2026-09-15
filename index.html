@@ -800,34 +800,46 @@ document.getElementById('decorWaBtn').onclick = quickWaContact;
 let teamPoll = null;
 
 async function renderTeamView(){
-  myName = await storageGet('zawya_my_name', false);
-  const root = document.getElementById('teamView');
+    myName = await storageSet('zawya_my_name', null, true) || localStorage.getItem('zawya_my_name');
+    const root = document.getElementById('teamview');
+    if(!root) return;
 
-  if(!myName){
-    root.innerHTML = `
-      <div class="team-login">
-        <h3 style="margin:0 0 4px">تسجيل الدخول لفريق العمل</h3>
-        <p style="color:var(--cream-dim);font-size:13px;margin:0">اختر اسمك لعرض الطلبات واستلامها</p>
-        <div class="staff-pick" id="staffPick"></div>
-      </div>`;
-    const pick = document.getElementById('staffPick');
-    TEAM.forEach(m=>{
-      const b = document.createElement('button');
-      b.className = 'staff-btn';
-      b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone.replace('20','0')}</div></span>`;
-      b.onclick = async () => { 
-    try {
-        await storageSet('zawya_my_name', m.name, false); 
-        myName = m.name; 
-        renderTeamView(); 
-    } catch (err) {
-        console.error("خطأ أثناء تسجيل الدخول:", err);
+    if(!myName){
+        root.innerHTML = `
+        <div class="team-login">
+            <h3 style="margin:0 0 4px">تسجيل الدخول لفريق العمل</h3>
+            <p style="color:var(--cream-dim);font-size:13px;margin:0">اختر اسمك لمعرفة الطلبات واستلامها</p>
+            <div class="staff-pick" id="staffPick"></div>
+        </div>`;
+        
+        const pick = document.getElementById('staffPick');
+        if(pick) {
+            pick.innerHTML = '';
+            TEAM.forEach(m => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'staff-btn';
+                b.style.cursor = 'pointer';
+                b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone||''}</div></span>`;
+
+                b.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("تم النقر على العضو:", m.name);
+                    try {
+                        await storageSet('zawya_my_name', m.name, false);
+                        localStorage.setItem('zawya_my_name', m.name);
+                        myName = m.name;
+                        renderTeamView();
+                    } catch (err) {
+                        console.error("خطأ أثناء تسجيل الدخول:", err);
+                    }
+                });
+                pick.appendChild(b);
+            });
+        }
+        return;
     }
-};
-      pick.appendChild(b);
-    });
-    return;
-  }
 
   root.innerHTML = `
     <div class="team-bar">
