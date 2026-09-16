@@ -556,15 +556,13 @@ async function sendOrder(){
   const online = await getOnlineMembers();
   const body = document.getElementById('pickerBody');
   body.innerHTML = '';
- if(!online.length) {
-    body.innerHTML = `<div class="picker-empty">مفيش حد من الفريق متواجد دلوقتي – هيتوصل طلبك لمظهر علي مباشرة.</div>`;
+  if(!online.length){
+    body.innerHTML = `<div class="picker-empty">مفيش حد من الفريق متواجد دلوقتي — هيتوصل طلبك لإدارة البوفيه مباشرة.</div>`;
     const b = document.createElement('button');
     b.className = 'staff-pick-btn';
-    b.textContent = 'إرسال إلى مساعد الإدارة – مظهر علي';
-    const mazharManager = { name: 'مظهر علي' };
-    b.onclick = () => { closeOverlay('pickerOverlay'); finalizeSendOrder(mazharManager); };
+    b.textContent = 'إرسال إلى الإدارة — ' + MANAGER.name;
+    b.onclick = ()=>{ closeOverlay('pickerOverlay'); finalizeSendOrder(MANAGER); };
     body.appendChild(b);
-}
   } else {
     online.forEach(m=>{
       const b = document.createElement('button');
