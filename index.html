@@ -173,6 +173,19 @@
 </style>
 </head>
 <body>
+  <!-- نافذة اختيار عضو الفريق المتواجد لإرسال الطلب عبر الواتساب -->
+<div id="teamSelectModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#fff; width:100%; max-width:380px; padding:22px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.2); text-align:center; font-family:'IBM Plex Sans Arabic', sans-serif;">
+    <h3 style="color:#163F2C; margin-top:0; font-family:'Cairo';">اختر أحد أعضاء الفريق المتاحين</h3>
+    <p style="font-size:13px; color:#666; margin-bottom:16px;">سيتم توجيه طلبك مباشرة عبر الواتساب للعضو المختار وتسجيله بنجاح:</p>
+    
+    <div id="activeTeamListContainer" style="max-height:220px; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:8px;">
+      <!-- سيتم تعبئتها ديناميكياً بأعضاء الفريق المتواجدين فقط -->
+    </div>
+    
+    <button onclick="document.getElementById('teamSelectModal').style.display='none'" style="background:#767F70; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:700; width:100%;">إلغاء</button>
+  </div>
+</div>
 
 <!-- زر صندوق الإشعارات العائم (يظهر لفريق العمل فقط المسجلين عبر team.html) -->
 <div class="floating-bell" id="teamBellBtn" title="صندوق طلبات فريق العمل">
@@ -471,8 +484,65 @@ function renderCartPanel(){
       linesRoot.appendChild(line);
     });
   }
-  document.getElementById('sendOrderBtn').disabled = cart.length===0;
+linesRoot.appendChild(line);
+  });
+  document.getElementById('sendOrderBtn').disabled = cart.length==0;
 }
+
+// دالة إرسال الطلب المباشر وتسجيله في قاعدة البيانات وإشعارات الفريق
+// دالة إرسال الطلب المباشر وتسجيله في قاعدة البيانات وإشعارات الفريق
+// دالة إرسال الطلب المباشر وتسجيله في قاعدة البيانات وإشعارات الفريق
+document.getElementById('sendOrderBtn').onclick = async () => {
+  const customerName = document.getElementById('custName').value.trim();
+  const customerNote = document.getElementById('custNote').value.trim();
+  
+  if(typeof cart === 'undefined' || cart.length === 0){
+    alert('السلة فارغة، أضف بعض المنتجات أولاً!');
+    return;
+  }
+
+  let total = 0;
+  const items = cart.map(item => {
+    total += item.price * item.qty;
+    return { name: item.name, price: item.price, qty: item.qty };
+  });
+
+  const orderPayload = {
+    customerName: customerName || 'عميل (بدون اسم)',
+    customerNote: customerNote,
+    items: items,
+    total: total,
+    status: 'pending',
+    createdAt: fs.serverTimestamp()
+  };
+
+  try {
+    // 1. حفظ الطلب في قاعدة البيانات الأساسية
+    await fs.addDoc(fs.collection(db, 'orders'), orderPayload);
+
+    // 2. تسجيل إشعار فوري لفريق العمل المتواجد
+    await fs.addDoc(fs.collection(db, 'team_notifications'), {
+      customerName: orderPayload.customerName,
+      total: total,
+      itemsSummary: items.map(i => `${i.name} (${i.qty})`).join(', '),
+      createdAt: fs.serverTimestamp(),
+      read: false
+    });
+
+    // 3. تفريغ السلة وتحديث الواجهة مباشرة بدون فتح واتساب
+    cart = [];
+    if(typeof renderCartPanel === 'function') renderCartPanel();
+    
+    alert('✅ تم إرسال طلبك للبوفيه بنجاح! يتم الآن تجهيزه من قبل فريق العمل.');
+    
+    document.getElementById('custName').value = '';
+    document.getElementById('custNote').value = '';
+
+  } catch (e) {
+    console.error(e);
+    alert('حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.');
+  }
+};
 document.getElementById('cartPanelHead').addEventListener('click', ()=>{
   document.getElementById('cartPanel').classList.toggle('open');
 });
@@ -499,10 +569,13 @@ async function initFirestore(){
 
 function updateTeamBellVisibility(){
   const me = localStorage.getItem('teamMember');
-  const isTeam = me && TEAM.some(t=>t.name===me);
-  document.getElementById('teamBellBtn').classList.toggle('show', !!isTeam);
+  const bellBtn = document.getElementById('teamBellBtn');
+  if(me && me.trim() !== ''){
+    bellBtn.classList.add('show');
+  } else {
+    bellBtn.classList.remove('show');
+  }
 }
-
 // عند الضغط على جرس الإشعارات، تفتح نافذة عرض الطلبات الواردة للفريق
 document.getElementById('teamBellBtn').onclick = ()=>{
   const body = document.getElementById('teamOrdersBody');
@@ -586,7 +659,88 @@ function showInfo(type){
 
 const footerYearEl = document.getElementById('footerYear');
 if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
+// دالة إرسال الطلب وفتح نافذة اختيار الفريق المتواجد
+document.getElementById('sendOrderBtn').onclick = () => {
+  const customerName = document.getElementById('custName').value.trim();
+  const customerNote = document.getElementById('custNote').value.trim();
+  
+  if(typeof cart === 'undefined' || cart.length === 0){
+    alert('السلة فارغة!');
+    return;
+  }
 
+  let total = 0;
+  const items = cart.map(item => {
+    total += item.price * item.qty;
+    return { name: item.name, price: item.price, qty: item.qty };
+  });
+
+  const orderData = {
+    customerName: customerName || 'عميل (بدون اسم)',
+    customerNote: customerNote,
+    items: items,
+    total: total
+  };
+
+  handleCheckoutProcess(orderData);
+};
+
+// دالة جلب وعرض أعضاء الفريق المتواجدين في النافذة المنبثقة
+async function handleCheckoutProcess(orderData) {
+  const modal = document.getElementById('teamSelectModal');
+  const container = document.getElementById('activeTeamListContainer');
+  container.innerHTML = '<p style="font-size:13px; color:#888;">جاري جلب الفريق المتواجد...</p>';
+  modal.style.display = 'flex';
+
+  try {
+    const snapshot = await fs.getDocs(fs.query(fs.collection(db, 'team_status'), fs.where('online', '==', true)));
+    
+    container.innerHTML = '';
+    if(snapshot.empty){
+      container.innerHTML = '<p style="font-size:13px; color:#B0463C; font-weight:700;">عذراً، لا يوجد أي عضو فريق متواجد حالياً.</p>';
+      return;
+    }
+
+    snapshot.forEach(docSnap => {
+      const member = docSnap.data();
+      const phone = docSnap.id;
+
+      const btn = document.createElement('button');
+      btn.style.cssText = "background:#F6F1E4; border:1px solid #1F6E4A; padding:12px; border-radius:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; font-weight:700; width:100%; transition:0.2s;";
+      btn.innerHTML = `
+        <span style="color:#163F2C; font-size:14px;">🟢 ${member.name}</span>
+        <span style="background:#1F6E4A; color:#fff; padding:4px 10px; border-radius:6px; font-size:11.5px;">إرسال عبر الواتساب</span>
+      `;
+
+      btn.onclick = async () => {
+        const orderPayload = {
+          ...orderData,
+          assignedTo: member.name,
+          assignedPhone: phone,
+          status: 'pending',
+          createdAt: fs.serverTimestamp()
+        };
+        
+        await fs.addDoc(fs.collection(db, 'orders'), orderPayload);
+
+        let itemsText = orderData.items.map(i => `- ${i.name} (${i.qty})`).join('\n');
+        let msg = `مرحباً ${member.name}، لدي طلب جديد:\n${itemsText}\n\nالإجمالي: ${orderData.total} جنيه\nاسم العميل: ${orderData.customerName}`;
+        
+        const waUrl = `https://wa.me/2${phone}?text=${encodeURIComponent(msg)}`;
+        
+        modal.style.display = 'none';
+        window.open(waUrl, '_blank');
+        alert('تم إرسال الطلب وتسجيله بنجاح باسم العضو: ' + member.name);
+      };
+
+      container.appendChild(btn);
+    });
+
+  } catch(e) {
+    console.error(e);
+    container.innerHTML = '<p style="color:red; font-size:12px;">حدث خطأ أثناء جلب حالة الفريق.</p>';
+  }
+}
 renderCategories();
 renderCartPanel();
 updateTeamBellVisibility();

@@ -1,136 +1,193 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم فريق العمل - بوفيه زاوية شميس</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
-        button { background-color: #25d366; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        button:hover { background-color: #128c7e; }
-        .logout-btn { background-color: #ff4d4d; margin-top: 10px; }
-        .logout-btn:hover { background-color: #cc0000; }
-        .hidden { display: none; }
-        .order-card { background: #fff3cd; border: 1px solid #ffeeba; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دخول فريق العمل — بوفيه الزاوية شميس</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3EDDF; --panel:#FFFFFF; --panel-2:#F6F1E4;
+    --cream:#20291F; --cream-dim:#767F70;
+    --gold:#1F6E4A; --gold-dark:#163F2C;
+    --bad:#B0463C; --green-online:#2be374;
+    --radius-lg:20px; --shadow:0 10px 26px rgba(32,41,31,.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--cream); font-family:'IBM Plex Sans Arabic', sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; margin:0; padding:16px;
+  }
+  .card{
+    background:var(--panel); width:100%; max-width:440px; padding:24px; border-radius:var(--radius-lg);
+    box-shadow:var(--shadow); border:1px solid rgba(31,110,74,.15);
+  }
+  h2{font-family:'Cairo'; font-size:20px; color:var(--gold-dark); margin-top:0; text-align:center;}
+  label{display:block; font-size:12.5px; color:var(--cream-dim); margin:12px 0 5px; font-weight:600;}
+  input{width:100%; padding:11px; background:var(--panel-2); border:1px solid rgba(32,41,31,.15); border-radius:10px; font-family:inherit; font-size:14px; color:var(--cream); text-align:center;}
+  input[type="password"]{letter-spacing:6px; font-weight:bold;}
+  .btn{width:100%; background:linear-gradient(155deg, var(--gold), var(--gold-dark)); color:#fff; border:none; padding:12px; border-radius:11px; font-family:inherit; font-weight:800; font-size:14px; cursor:pointer; margin-top:16px; box-shadow:0 6px 16px rgba(22,63,44,.25);}
+  .back-link{display:block; text-align:center; margin-top:14px; color:var(--cream-dim); text-decoration:none; font-size:12.5px; font-weight:700;}
+  
+  /* قائمة حالة الفريق */
+  .team-status-box{margin-top:22px; border-top:1px solid rgba(32,41,31,.1); padding-top:14px;}
+  .team-status-title{font-size:13px; font-weight:800; color:var(--gold-dark); margin-bottom:10px; text-align:center;}
+  .team-member-row{display:flex; align-items:center; justify-content:space-between; background:var(--panel-2); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; font-weight:700;}
+  .status-badge{display:flex; align-items:center; gap:6px; font-size:11.5px;}
+  .dot{width:9px; height:9px; border-radius:50%;}
+  .dot.online{background:var(--green-online); box-shadow:0 0 8px var(--green-online);}
+  .dot.offline{background:var(--cream-dim); opacity:0.5;}
+  .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--gold-dark); color:#fff; padding:10px 16px; border-radius:20px; font-size:12.5px; font-weight:700; opacity:0; pointer-events:none; transition:opacity .2s;}
+  .toast.show{opacity:1;}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <h2>☕ بوفيه زاوية شميس - فريق العمل</h2>
+<div class="card">
+  <h2>🔐 دخول فريق العمل</h2>
+  
+  <div id="loginForm">
+    <label>رقم الواتساب (مثال: 010xxxxxxxx)</label>
+    <input type="text" id="whatsappInput" placeholder="أدخل رقم الواتساب المسجل">
+    
+    <label>الرقم السري (4 أرقام)</label>
+    <input type="password" id="pinInput" maxlength="4" placeholder="••••">
+    
+    <button class="btn" id="loginBtn">دخول وتفعيل عبر الواتساب</button>
+  </div>
 
-    <!-- شاشة تسجيل الدخول -->
-    <div id="loginSection" class="form-group">
-        <label for="memberSelect">اختر اسمك لبدء الدوام:</label>
-        <select id="memberSelect">
-            <option value="">-- اختر اسم عضو الفريق --</option>
-            <option value="مظهر">مظهر</option>
-            <option value="حسن">حسن</option>
-            <option value="يوسف">يوسف</option>
-            <option value="كريم">كريم</option>
-        </select>
-        <button onclick="login()" style="margin-top: 15px;">تسجيل الدخول وبدء الدوام</button>
-    </div>
-
-    <!-- لوحة التحكم وظهور الطلبات (تختفي حتى يتم تسجيل الدخول) -->
-    <div id="dashboardSection" class="hidden">
-        <p>مرحباً يا <span id="welcomeUser" style="font-weight: bold; color: #25d366;"></span> (متواجد الآن للعمل)</p>
-        
-        <h3>📦 الطلبات الواردة الجديدة:</h3>
-        <div id="ordersContainer">
-            <p>جارٍ تحميل الطلبات الحية...</p>
-        </div>
-
-        <button class="logout-btn" onclick="logout()">إنهاء الدوام / تسجيل الخروج</button>
-    </div>
+<!-- شريط حالات أعضاء الفريق -->
+<div class="team-status-box" style="margin-top:22px; border-top:1px solid rgba(32,41,31,.1); padding-top:14px;">
+  <div style="font-size:13px; font-weight:800; color:var(--gold-dark); margin-bottom:10px; text-align:center;">حالة أعضاء الفريق</div>
+  <div id="teamStatusList">جاري تحميل حالة الأعضاء...</div>
 </div>
+  <div id="dashboardView" style="display:none; text-align:center;">
+    <p id="welcomeMsg" style="font-weight:800; color:var(--gold-dark); font-size:15px; margin-bottom:10px;"></p>
+    <button class="btn" id="logoutBtn" style="background:var(--bad);">تسجيل خروج</button>
+  </div>
 
-<script>
-    function login() {
-        const select = document.getElementById('memberSelect');
-        const name = select.value;
-        if (!name) {
-            alert('الرجاء اختيار اسمك من القائمة للبدء');
-            return;
-        }
+  <a href="index.html" class="back-link">← العودة للرئيسية (المنيو)</a>
 
-        // حفظ اسم المستخدم في ذاكرة المتصفح المؤقتة
-        localStorage.setItem('teamMember', name);
-        
-        // إظهار لوحة التحكم وإخفاء شاشة الدخول
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-        document.getElementById('welcomeUser').innerText = name;
-    }
-
-    function logout() {
-        // حذف البيانات وإنهاء الدوام
-        localStorage.removeItem('teamMember');
-        document.getElementById('dashboardSection').classList.add('hidden');
-        document.getElementById('loginSection').classList.remove('hidden');
-        document.getElementById('memberSelect').value = '';
-    }
-
-    // التحقق مما إذا كان العضو مسجلاً مسبقاً قبل تحديث الصفحة
-    window.onload = function() {
-        const savedMember = localStorage.getItem('teamMember');
-        if (savedMember) {
-            document.getElementById('memberSelect').value = savedMember;
-            login();
-        }
-    };
-</script>
-
-<!-- اتصال Firebase والاستماع للطلبات لحظياً -->
+ 
+<!-- ملفات البيانات والاتصال بقاعدة البيانات -->
+<script src="menu-data.js"></script>
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { db } from './firebase-config.js';
+  import * as fs from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2200);
+  }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // قاعدة بيانات الأعضاء المحدثة بناءً على طلبك
+  const REGISTERED_TEAM = [
+    { name: "مظهر علي", phone: "01021776980", pin: "1234" },
+    { name: "حسن ابو عمر", phone: "01220522806", pin: "2222" },
+    { name: "كريم احمد", phone: "01200615796", pin: "3333" }
+  ];
+ // دالة الاستماع وتحديث حالات الفريق في فايربيز لمعرفتها مباشرة
+  function listenTeamStatus() {
+    fs.onSnapshot(fs.collection(db, 'team_status'), (snapshot) => {
+      const statuses = {};
+      snapshot.forEach(docSnap => {
+        statuses[docSnap.id] = docSnap.data();
+      });
 
-    // تفعيل الاستماع الحي للطلبات (onSnapshot)
-    try {
-        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
-            const container = document.getElementById('ordersContainer');
-            if (snapshot.empty) {
-                container.innerHTML = '<p>لا توجد طلبات جديدة حالياً...</p>';
-                return;
-            }
-            
-            let html = '';
-            snapshot.forEach((doc) => {
-                const order = doc.data();
-                html += `
-                    <div class="order-card">
-                        <strong>العميل:</strong> ${order.customerName || 'غير معروف'} <br>
-                        <strong>الطلب:</strong> ${order.orderDetails || ''} <br>
-                        <small style="color: #666;">الوقت: ${new Date(order.createdAt?.toDate()).toLocaleTimeString('ar-EG') || ''}</small>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        });
-        console.log("تم تفعيل مستمع الطلبات الحية بنجاح");
-    } catch (error) {
-        console.error("خطأ في جلب الطلبات:", error);
+      const listEl = document.getElementById('teamStatusList');
+      if(!listEl) return;
+      listEl.innerHTML = '';
+
+      REGISTERED_TEAM.forEach(member => {
+        const isOnline = statuses[member.phone] && statuses[member.phone].online === true;
+        
+        const row = document.createElement('div');
+        row.style.cssText = "display:flex; align-items:center; justify-content:space-between; background:var(--panel-2, #F6F1E4); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; font-weight:700;";
+        
+        row.innerHTML = `
+          <span>${member.name}</span>
+          <div style="display:flex; align-items:center; gap:6px; font-size:11.5px;">
+            <span style="width:9px; height:9px; border-radius:50%; background:${isOnline ? '#2be374' : '#111111'}; box-shadow:${isOnline ? '0 0 8px #2be374' : 'none'}; display:inline-block;"></span>
+            <span style="color:${isOnline ? 'var(--gold-dark)' : '#555'};">${isOnline ? 'متواجد' : 'غير متواجد'}</span>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+    });
+  }
+
+  // تشغيل الدالة عند تحميل الصفحة
+  listenTeamStatus();
+  // فحص حالة الجلسة الحالية للمستخدم
+  const currentPhone = localStorage.getItem('teamPhone');
+  if(currentPhone){
+    const member = REGISTERED_TEAM.find(m => m.phone === currentPhone);
+    if(member){
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'block';
+      document.getElementById('welcomeMsg').textContent = `أهلاً بك يا ${member.name} (متواجد حالياً)`;
     }
-</script>
+  }
 
+  // زر تسجيل الدخول
+  document.getElementById('loginBtn').onclick = async () => {
+    const phone = document.getElementById('whatsappInput').value.trim();
+    const pin = document.getElementById('pinInput').value.trim();
+
+    const member = REGISTERED_TEAM.find(m => m.phone === phone && m.pin === pin);
+    if(!member){
+      toast('رقم الواتساب أو الرقم السري غير صحيح!');
+      return;
+    }
+
+    try {
+      // 1. تحديث حالة الاتصال في فايربيز (متواجد)
+      await fs.setDoc(fs.doc(db, 'team_status', member.phone), {
+        name: member.name,
+        online: true,
+        lastLogin: fs.serverTimestamp()
+      }, { merge: true });
+
+      // 2. حفظ البيانات محلياً
+      localStorage.setItem('teamMember', member.name);
+      localStorage.setItem('teamPhone', member.phone);
+
+      // 3. إرسال إشعار الواتساب
+      const whatsappMsg = `مرحباً ${member.name}، تم تسجيل دخولك بنجاح إلى نظام بوفيه الزاوية شميس.`;
+      const waLink = `https://wa.me/2${member.phone}?text=${encodeURIComponent(whatsappMsg)}`;
+      
+      toast('تم تسجيل الدخول بنجاح! جاري إرسال إشعار الواتساب...');
+      
+      setTimeout(() => {
+        window.open(waLink, '_blank');
+        window.location.href = 'index.html';
+      }, 1200);
+
+    } catch (e) {
+      console.error(e);
+      toast('حدث خطأ في الاتصال بقاعدة البيانات');
+    }
+  };
+
+  // زر تسجيل الخروج
+  document.getElementById('logoutBtn').onclick = async () => {
+    const phone = localStorage.getItem('teamPhone');
+    if(phone){
+      try {
+        await fs.setDoc(fs.doc(db, 'team_status', phone), {
+          online: false,
+          lastLogout: fs.serverTimestamp()
+        }, { merge: true });
+      } catch(e){}
+    }
+    localStorage.removeItem('teamMember');
+    localStorage.removeItem('teamPhone');
+    toast('تم تسجيل الخروج بنجاح');
+    setTimeout(()=> location.reload(), 1000);
+  };
+
+  listenTeamStatus();
+</script>
 </body>
 </html>
