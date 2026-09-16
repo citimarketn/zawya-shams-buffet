@@ -8,26 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F3EDDF;
-    --panel:#FFFFFF;
-    --panel-2:#F6F1E4;
-    --cream:#20291F;
-    --cream-dim:#767F70;
-    --gold:#1F6E4A;
-    --gold-dark:#163F2C;
-    --herb:#7C9256;
-    --herb-tint:rgba(124,146,86,.16);
-    --coffee-tint:rgba(154,98,50,.14);
-    --mix-tint:rgba(198,153,94,.16);
-    --cold:#3D84A8;
-    --cold-tint:rgba(78,147,184,.16);
-    --ok:#3E7A3E;
-    --warn:#B07A1F;
-    --hold:#3E6DA0;
-    --bad:#B0463C;
-    --ink:#20291F;
-    --radius-lg:20px;
-    --radius-sm:12px;
+    --bg:#F3EDDF; --panel:#FFFFFF; --panel-2:#F6F1E4;
+    --cream:#20291F; --cream-dim:#767F70;
+    --gold:#1F6E4A; --gold-dark:#163F2C;
+    --herb:#7C9256; --cold:#3D84A8; --bad:#B0463C; --ink:#20291F; --ok:#3E7A3E;
+    --radius-lg:20px; --radius-sm:12px;
     --shadow:0 10px 26px rgba(32,41,31,.12);
   }
   *{box-sizing:border-box;}
@@ -37,87 +22,48 @@
       radial-gradient(1100px 550px at 15% -8%, rgba(31,110,74,.07), transparent 60%),
       radial-gradient(900px 500px at 105% 10%, rgba(224,138,62,.08), transparent 55%),
       var(--bg);
-    color:var(--cream);
-    font-family:'IBM Plex Sans Arabic', sans-serif;
-    min-height:100vh;
+    color:var(--cream); font-family:'IBM Plex Sans Arabic', sans-serif; min-height:100vh;
   }
   h1,h2,h3,.display{font-family:'Cairo', sans-serif;}
-  .wrap{max-width:640px;margin:0 auto;padding:0 16px;}
 
-  /* ---- Header ---- */
   .hero{padding:22px 16px 6px;position:relative;}
   .hero-inner{max-width:640px;margin:0 auto;}
   .brand-row{display:flex;align-items:center;gap:13px;}
-  .brand-mark{
-    width:52px;height:52px;border-radius:15px;flex-shrink:0;
-    background:linear-gradient(155deg, var(--gold), var(--gold-dark));
-    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
-  }
+  .brand-mark{width:52px;height:52px;border-radius:15px;flex-shrink:0;background:linear-gradient(155deg, var(--gold), var(--gold-dark));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);}
   .brand-mark svg{width:30px;height:30px;}
   h1.title{font-size:24px;margin:0;font-weight:900;color:var(--cream);}
   .subtitle{margin:2px 0 0;color:var(--cream-dim);font-size:13px;}
-  .top-wa{
-    margin-inline-start:auto;width:46px;height:46px;border-radius:50%;flex-shrink:0;
-    background:#25D366;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 18px rgba(37,211,102,.4);border:none;cursor:pointer;
-  }
-  .top-wa svg{width:24px;height:24px;fill:#08240f;}
+  .bell-btn{margin-inline-start:auto;position:relative;width:46px;height:46px;border-radius:50%;flex-shrink:0;background:var(--panel-2);border:1px solid rgba(32,41,31,.15);display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--gold-dark);}
+  .bell-btn.show{display:flex;}
+  .bell-btn svg{width:22px;height:22px;}
+  .bell-badge{position:absolute;top:-4px;right:-4px;background:var(--bad);color:#fff;font-size:10px;font-weight:800;min-width:17px;height:17px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;}
   .addr{margin-top:12px;display:flex;gap:8px;align-items:flex-start;color:var(--cream-dim);font-size:12.5px;line-height:1.7;}
   .addr svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;opacity:.85}
 
-  /* ---- Decorative banner ---- */
-  .decor{
-    max-width:640px;margin:14px auto 0;padding:26px 18px 22px;
-    background:var(--panel);
-    border:1px solid rgba(31,110,74,.15);border-radius:26px;
-    text-align:center;position:relative;overflow:hidden;
-    box-shadow:var(--shadow);
-  }
-  .decor::before{
-    content:"";position:absolute;inset:0;
-    background:repeating-linear-gradient(45deg, rgba(31,110,74,.03) 0 2px, transparent 2px 22px);
-    pointer-events:none;
-  }
+  .presence-bar{max-width:640px;margin:12px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .presence-label{font-size:11.5px;color:var(--cream-dim);font-weight:600;}
+  .presence-chip{display:flex;align-items:center;gap:5px;background:var(--panel);border:1px solid rgba(32,41,31,.08);border-radius:16px;padding:4px 10px;font-size:11.5px;font-weight:700;}
+  .presence-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0;}
+  .presence-empty{font-size:11.5px;color:var(--cream-dim);}
+
+  .decor{max-width:640px;margin:14px auto 0;padding:26px 18px 22px;background:var(--panel);border:1px solid rgba(31,110,74,.15);border-radius:26px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+  .decor::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg, rgba(31,110,74,.03) 0 2px, transparent 2px 22px);pointer-events:none;}
   .decor-illustration{width:200px;height:200px;margin:0 auto 6px;position:relative;}
   .decor-illustration svg{width:100%;height:100%;}
-  .tag-bubble{
-    position:absolute;background:#fff;border:1px solid rgba(31,110,74,.22);
-    border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:800;
-    color:var(--gold-dark);box-shadow:0 6px 14px rgba(32,41,31,.14);white-space:nowrap;
-  }
+  .tag-bubble{position:absolute;background:#fff;border:1px solid rgba(31,110,74,.22);border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:800;color:var(--gold-dark);box-shadow:0 6px 14px rgba(32,41,31,.14);white-space:nowrap;}
   .tag-top{top:2px;right:0;transform:rotate(-5deg);}
   .tag-bottom{bottom:14px;left:-6px;transform:rotate(4deg);}
-  .overline{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    color:var(--cream-dim);font-size:12.5px;font-weight:600;margin:2px 0 6px;position:relative;
-  }
+  .overline{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--cream-dim);font-size:12.5px;font-weight:600;margin:2px 0 6px;position:relative;}
   .overline::before, .overline::after{content:"";width:16px;height:1px;background:rgba(32,41,31,.25);}
   .tagline-1{font-family:'Cairo';font-weight:900;font-size:22px;color:var(--gold-dark);margin:2px 0 6px;position:relative;}
   .tagline-2{font-size:13px;color:var(--cream-dim);font-weight:600;margin:0 0 16px;position:relative;}
-  .decor-cta{
-    position:relative;display:inline-flex;align-items:center;gap:8px;
-    background:linear-gradient(155deg, var(--gold), var(--gold-dark));color:#fff;border:none;padding:12px 24px;border-radius:30px;
-    font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 18px rgba(22,63,44,.3);
-  }
+  .decor-cta{position:relative;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(155deg, var(--gold), var(--gold-dark));color:#fff;border:none;padding:12px 24px;border-radius:30px;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 18px rgba(22,63,44,.3);}
   .decor-cta svg{width:17px;height:17px;fill:#fff;}
 
-  /* ---- Tabs ---- */
-  .tabs{position:sticky;top:0;z-index:30;background:rgba(243,237,223,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(32,41,31,.08);margin-top:16px;}
-  .tabs-inner{max-width:640px;margin:0 auto;display:flex;padding:6px 16px;gap:6px;}
-  .tab-btn{flex:1;border:none;background:transparent;color:var(--cream-dim);font-family:inherit;font-size:14px;font-weight:700;padding:12px 8px;border-radius:12px;cursor:pointer;}
-  .tab-btn.active{background:var(--panel-2);color:var(--gold);}
+  main{max-width:640px;margin:0 auto;padding:20px 16px 30px;}
 
-  main{max-width:640px;margin:0 auto;padding:14px 16px 30px;}
-
-  /* ---- Cart panel (pinned above categories) ---- */
-  .cart-panel{
-    background:var(--panel);border:1px solid rgba(214,162,74,.22);
-    border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden;
-  }
-  .cart-panel-head{
-    display:flex;align-items:center;gap:10px;padding:14px 16px;
-    background:rgba(214,162,74,.08);cursor:pointer;
-  }
+  .cart-panel{background:var(--panel);border:1px solid rgba(214,162,74,.22);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden;}
+  .cart-panel-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:rgba(214,162,74,.08);cursor:pointer;}
   .cart-panel-head svg{width:20px;height:20px;color:var(--gold);flex-shrink:0;}
   .cart-panel-head h2{margin:0;font-size:15.5px;flex:1;}
   .cart-count-pill{background:var(--gold);color:#fff;font-weight:800;font-size:12px;padding:3px 10px;border-radius:20px;}
@@ -136,28 +82,16 @@
   .cart-empty-msg{color:var(--cream-dim);font-size:13px;text-align:center;padding:16px 4px 6px;}
 
   label.field{display:block;font-size:12px;color:var(--cream-dim);margin:12px 0 5px;}
-  input[type=text], textarea, select{
-    font-family:inherit;background:var(--panel-2);color:var(--cream);
-    border:1px solid rgba(32,41,31,.15);border-radius:10px;padding:9px 11px;font-size:13.5px;width:100%;
-  }
+  input[type=text], textarea, select{font-family:inherit;background:var(--panel-2);color:var(--cream);border:1px solid rgba(32,41,31,.15);border-radius:10px;padding:9px 11px;font-size:13.5px;width:100%;}
   textarea{resize:vertical;min-height:56px;}
 
-  .primary-btn{
-    width:100%;border:none;background:linear-gradient(155deg,#2be374,#1fae52);color:#062c14;
-    padding:13px;border-radius:13px;font-family:inherit;font-weight:800;font-size:14.5px;
-    display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-top:12px;
-  }
+  .primary-btn{width:100%;border:none;background:linear-gradient(155deg,#2be374,#1fae52);color:#062c14;padding:13px;border-radius:13px;font-family:inherit;font-weight:800;font-size:14.5px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-top:12px;}
   .primary-btn:disabled{opacity:.4;cursor:not-allowed;}
   .primary-btn svg{width:18px;height:18px;fill:currentColor;}
 
-  /* ---- Category chip nav (like the reference menu tabs) ---- */
   .section-label{font-size:12.5px;color:var(--cream-dim);margin:4px 2px 10px;font-weight:600;}
   .cat-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-  .cat-chip{
-    display:flex;align-items:center;gap:10px;background:var(--panel);
-    border:1px solid rgba(32,41,31,.08);border-radius:16px;padding:12px;cursor:pointer;
-    text-align:right;box-shadow:0 4px 12px rgba(32,41,31,.05);
-  }
+  .cat-chip{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid rgba(32,41,31,.08);border-radius:16px;padding:12px;cursor:pointer;text-align:right;box-shadow:0 4px 12px rgba(32,41,31,.05);}
   .cat-chip-icon{width:36px;height:36px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
   .cat-chip-icon svg{width:19px;height:19px;}
   .cat-chip-name{font-size:13px;font-weight:800;color:var(--cream);}
@@ -167,16 +101,10 @@
   .cat-chip.active .cat-chip-count{color:rgba(255,255,255,.75);}
   .cat-chip.active .cat-chip-icon{background:rgba(255,255,255,.22)!important;}
   .cat-chip.active .cat-chip-icon svg{filter:brightness(0) invert(1);}
-
   .cat-desc{font-size:12.5px;color:var(--cream-dim);margin:0 2px 12px;}
 
-  /* ---- Item cards, grid layout ---- */
   .items-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .item{
-    background:var(--panel);border-radius:16px;padding:12px;
-    border:1px solid rgba(32,41,31,.07);box-shadow:0 4px 10px rgba(32,41,31,.04);
-    display:flex;flex-direction:column;gap:8px;
-  }
+  .item{background:var(--panel);border-radius:16px;padding:12px;border:1px solid rgba(32,41,31,.07);box-shadow:0 4px 10px rgba(32,41,31,.04);display:flex;flex-direction:column;gap:8px;}
   .item.expanded{grid-column:1/-1;}
   .item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
   .item-thumb{width:42px;height:42px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
@@ -184,11 +112,9 @@
   .item-text{flex:1;min-width:0;}
   .item-name{font-size:13.5px;font-weight:800;color:var(--cream);display:block;line-height:1.35;}
   .item-sub{font-size:10.5px;color:var(--cream-dim);margin-top:1px;display:block;}
-  .add-btn{
-    border:none;background:var(--panel-2);color:var(--gold-dark);font-family:inherit;font-weight:800;
-    font-size:12px;padding:8px 10px;border-radius:12px;cursor:pointer;width:100%;
-    display:flex;align-items:center;justify-content:center;gap:5px;
-  }
+  .item-price{font-size:11.5px;font-weight:800;color:var(--gold-dark);margin-top:3px;display:block;}
+  .item-price.unset{color:var(--cream-dim);font-weight:600;font-style:italic;}
+  .add-btn{border:none;background:var(--panel-2);color:var(--gold-dark);font-family:inherit;font-weight:800;font-size:12px;padding:8px 10px;border-radius:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:5px;}
   .add-btn::before{content:"+";font-size:14px;font-weight:900;line-height:1;}
   .add-btn:hover{background:var(--gold);color:#fff;}
   .item.expanded .add-btn{background:var(--gold);color:#fff;}
@@ -207,52 +133,17 @@
   .stepper span{width:26px;text-align:center;font-weight:700;font-size:14px;}
   .confirm-add{width:100%;margin-top:10px;background:var(--gold);color:#fff;border:none;padding:10px;border-radius:10px;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;}
 
-  /* ---- Team view (kept, restyled) ---- */
-  .team-login{padding:16px 4px;}
-  .staff-pick{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
-  .staff-btn{display:flex;align-items:center;gap:12px;background:var(--panel-2);border:1px solid rgba(32,41,31,.1);border-radius:14px;padding:12px 14px;color:var(--cream);cursor:pointer;font-family:inherit;width:100%;}
-  .avatar{width:38px;height:38px;border-radius:50%;background:var(--herb);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f1a08;flex-shrink:0;}
-  .staff-name{font-weight:700;font-size:14px;}
-  .staff-phone{font-size:11.5px;color:var(--cream-dim);direction:ltr;text-align:right;}
-  .team-bar{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-radius:16px;padding:12px 14px;margin-bottom:14px;}
-  .team-bar-who{display:flex;align-items:center;gap:10px;}
-  .duty-pill{font-size:11.5px;padding:5px 10px;border-radius:20px;border:none;font-family:inherit;font-weight:700;cursor:pointer;}
-  .duty-off{background:rgba(32,41,31,.1);color:var(--cream-dim);}
-  .duty-on{background:var(--ok);color:#08210c;}
-  .on-duty-banner{font-size:12px;color:var(--cream-dim);background:rgba(92,138,92,.12);border:1px solid rgba(92,138,92,.35);padding:9px 12px;border-radius:12px;margin-bottom:14px;}
-  .on-duty-banner b{color:var(--ok);}
-  .order-card{background:var(--panel);border-radius:16px;padding:14px 15px;margin-bottom:12px;border:1px solid rgba(32,41,31,.08);}
-  .order-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-  .order-id{font-size:11px;color:var(--cream-dim);direction:ltr;text-align:right;}
-  .status-badge{font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:20px;}
-  .st-pending{background:rgba(199,154,59,.18);color:var(--warn);}
-  .st-accepted{background:rgba(92,138,92,.18);color:var(--ok);}
-  .st-hold{background:rgba(91,127,166,.18);color:var(--hold);}
-  .st-rejected{background:rgba(194,90,80,.18);color:var(--bad);}
-  .st-done{background:rgba(32,41,31,.1);color:var(--cream-dim);}
-  .st-delivering{background:rgba(61,132,168,.18);color:var(--cold);}
+  .rating-panel{background:var(--panel);border-radius:18px;padding:16px;margin-top:18px;box-shadow:var(--shadow);}
+  .rating-panel h3{margin:0 0 3px;font-size:15px;}
+  .rating-panel p{margin:0 0 12px;font-size:11.5px;color:var(--cream-dim);}
+  .rating-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(32,41,31,.06);}
+  .rating-row:last-child{border-bottom:none;}
+  .rating-name{font-size:13px;font-weight:700;}
+  .rating-avg{font-size:11px;color:var(--cream-dim);}
+  .stars{display:flex;gap:3px;direction:ltr;}
+  .star-btn{background:none;border:none;font-size:19px;cursor:pointer;color:#d8cdb0;padding:1px;}
+  .star-btn.filled{color:#E0A63B;}
 
-  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
-  .stat-card{background:var(--panel);border:1px solid rgba(32,41,31,.07);border-radius:14px;padding:10px 4px;text-align:center;}
-  .stat-value{font-family:'Cairo';font-weight:900;font-size:19px;background:none!important;padding:0!important;border-radius:0!important;display:block;}
-  .stat-label{font-size:10px;color:var(--cream-dim);margin-top:2px;}
-  .order-customer{font-size:13px;color:var(--cream);font-weight:700;margin-bottom:4px;}
-  .order-note{font-size:11.5px;color:var(--cream-dim);margin-bottom:8px;}
-  .order-items{list-style:none;margin:0 0 10px;padding:0;}
-  .order-items li{font-size:12.5px;color:var(--cream-dim);padding:3px 0;}
-  .order-items li b{color:var(--cream);}
-  .claim-row{display:flex;gap:8px;flex-wrap:wrap;}
-  .claim-btn{flex:1;min-width:80px;border:none;padding:9px 6px;border-radius:10px;font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;}
-  .cb-accept{background:var(--ok);color:#08210c;}
-  .cb-hold{background:var(--hold);color:#0c1a29;}
-  .cb-reject{background:var(--bad);color:#280907;}
-  .cb-done{background:var(--gold);color:#fff;}
-  .claimed-line{font-size:12px;color:var(--cream-dim);}
-  .claimed-line b{color:var(--cream);}
-  .empty-state{text-align:center;padding:44px 12px;color:var(--cream-dim);}
-  .empty-state svg{width:40px;height:40px;opacity:.4;margin-bottom:10px;}
-  .refresh-btn{background:var(--panel-2);border:1px solid rgba(32,41,31,.15);color:var(--cream-dim);font-family:inherit;font-size:12px;padding:8px 12px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:14px;}
-  .refresh-btn svg{width:14px;height:14px;}
   .manager-note{font-size:11px;color:var(--cream-dim);text-align:center;padding:16px 10px 4px;}
 
   .site-footer{margin-top:22px;padding:18px 10px 8px;text-align:center;border-top:1px solid rgba(32,41,31,.08);}
@@ -263,10 +154,6 @@
   .footer-credit{font-size:11px;color:var(--cream-dim);margin:0;}
   .footer-credit a{color:var(--gold-dark);text-decoration:none;font-weight:700;}
 
-  .bell-btn{position:relative;background:var(--panel-2);border:1px solid rgba(32,41,31,.12);border-radius:12px;width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--cream);}
-  .bell-btn svg{width:19px;height:19px;}
-  .bell-badge{position:absolute;top:-5px;right:-5px;background:var(--bad);color:#fff;font-size:10px;font-weight:800;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
-
   .overlay{position:fixed;inset:0;background:rgba(20,26,20,.55);z-index:90;display:none;align-items:flex-end;justify-content:center;}
   .overlay.show{display:flex;}
   .sheet{background:var(--bg);width:100%;max-width:640px;border-radius:22px 22px 0 0;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(32,41,31,.3);}
@@ -276,6 +163,10 @@
   .sheet-body p{font-size:13px;line-height:1.8;color:var(--cream);margin:0 0 12px;}
   .sheet-body p:last-child{margin-bottom:0;}
   .icon-btn{background:none;border:none;color:var(--cream-dim);font-size:22px;cursor:pointer;line-height:1;padding:4px;}
+
+  .staff-pick-btn{display:flex;align-items:center;gap:12px;background:var(--panel-2);border:1px solid rgba(32,41,31,.1);border-radius:14px;padding:12px 14px;color:var(--cream);cursor:pointer;font-family:inherit;width:100%;margin-bottom:10px;font-size:14px;font-weight:700;text-align:right;}
+  .staff-pick-btn:hover{background:var(--gold);color:#fff;}
+  .picker-empty{text-align:center;color:var(--cream-dim);font-size:13px;padding:20px 10px;}
 
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold-dark);color:#fff;padding:11px 18px;border-radius:30px;font-size:13px;font-weight:700;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
@@ -295,8 +186,9 @@
         <h1 class="title">الزاوية شميس</h1>
         <p class="subtitle">بوفيه مشروبات ساخنة وباردة</p>
       </div>
-      <button class="top-wa" id="topWaBtn" title="اطلب عبر واتساب">
-        <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3 17.6L2 22l4.5-1.2A11 11 0 1 0 20.5 3.5zM12 20.2a9 9 0 0 1-4.6-1.3l-.3-.2-3 .8.8-2.9-.2-.3A9 9 0 1 1 12 20.2zm5-6.7c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1s-.7.9-.9 1-.3.2-.6.1a7.4 7.4 0 0 1-3.6-3.2c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5s-.6-1.5-.9-2c-.2-.5-.5-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.3c0 1.3 1 2.6 1.1 2.8.1.2 2 3 4.7 4.2a10.6 10.6 0 0 0 1.6.6c.7.2 1.3.2 1.8.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3 0-.2-.2-.2-.5-.3z"/></svg>
+      <button class="bell-btn" id="teamBellBtn" title="لوحة فريق العمل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a6 6 0 0 0-6 6v3.6c0 .7-.24 1.4-.68 1.94L4 15.5h16l-1.32-1.96a3.2 3.2 0 0 1-.68-1.94V8a6 6 0 0 0-6-6z"/><path d="M9.5 19a2.6 2.6 0 0 0 5 0"/></svg>
+        <span class="bell-badge" id="bellBadge">0</span>
       </button>
     </div>
     <div class="addr">
@@ -306,7 +198,12 @@
   </div>
 </div>
 
-<!-- Decorative banner: blessing + tea/coffee cups + tagline -->
+<!-- مين متواجد دلوقتي من الفريق -->
+<div class="presence-bar" id="presenceBar">
+  <span class="presence-label">الفريق المتواجد الآن:</span>
+  <span class="presence-empty">جارٍ التحميل...</span>
+</div>
+
 <div class="decor">
   <div class="decor-illustration">
     <div class="tag-bubble tag-top">من قلب شميس</div>
@@ -329,45 +226,39 @@
   </button>
 </div>
 
-<div class="tabs">
-  <div class="tabs-inner">
-    <button class="tab-btn active" id="tabMenuBtn" onclick="switchTab('menu')">قائمة الطلب</button>
-    <button class="tab-btn" id="tabTeamBtn" onclick="switchTab('team')">لوحة فريق العمل</button>
-  </div>
-</div>
-
 <main>
-  <div id="menuView">
-    <!-- Cart panel pinned above the categories -->
-    <div class="cart-panel" id="cartPanel">
-      <div class="cart-panel-head" id="cartPanelHead">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16l-1.5 11a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
-        <h2>سلة طلبك</h2>
-        <span class="cart-count-pill" id="cartCountPill">0</span>
-        <svg class="chev-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="cart-panel-body" id="cartPanelBody">
-        <div id="cartLines"></div>
-        <label class="field">اسمك</label>
-        <input type="text" id="custName" placeholder="اكتب اسمك">
-        <label class="field">ملاحظات على الطلب (اختياري)</label>
-        <textarea id="custNote" placeholder="مثال: بدون سكر زيادة، أو رقم المكان..."></textarea>
-        <button class="primary-btn" id="sendOrderBtn" onclick="sendOrder()">
-          <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3 17.6L2 22l4.5-1.2A11 11 0 1 0 20.5 3.5z"/></svg>
-          إرسال الطلب عبر واتساب
-        </button>
-      </div>
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-panel-head" id="cartPanelHead">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16l-1.5 11a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+      <h2>سلة طلبك</h2>
+      <span class="cart-count-pill" id="cartCountPill">0</span>
+      <svg class="chev-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </div>
-
-    <p class="section-label">اختر من الأقسام التالية</p>
-    <div class="cat-nav" id="catNav"></div>
-    <p class="cat-desc" id="catDesc"></p>
-    <div class="items-grid" id="categoriesRoot"></div>
+    <div class="cart-panel-body" id="cartPanelBody">
+      <div id="cartLines"></div>
+      <label class="field">اسمك</label>
+      <input type="text" id="custName" placeholder="اكتب اسمك">
+      <label class="field">ملاحظات على الطلب (اختياري)</label>
+      <textarea id="custNote" placeholder="مثال: بدون سكر زيادة، أو رقم المكان..."></textarea>
+      <button class="primary-btn" id="sendOrderBtn">
+        <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3 17.6L2 22l4.5-1.2A11 11 0 1 0 20.5 3.5z"/></svg>
+        إتمام الطلب
+      </button>
+    </div>
   </div>
 
-  <div id="teamView" style="display:none;"></div>
+  <p class="section-label">اختر من الأقسام التالية</p>
+  <div class="cat-nav" id="catNav"></div>
+  <p class="cat-desc" id="catDesc"></p>
+  <div class="items-grid" id="categoriesRoot"></div>
 
-  <p class="manager-note" id="managerNote"></p>
+  <div class="rating-panel">
+    <h3>قيّم فريق العمل</h3>
+    <p>تقييمك بيساعدنا نحسّن الخدمة — اختر عدد النجوم لأي عضو.</p>
+    <div id="ratingList"></div>
+  </div>
+
+  <p class="manager-note">إدارة البوفيه: الحاج عصام عبدالله</p>
 
   <div class="site-footer">
     <div class="footer-links">
@@ -382,6 +273,17 @@
   </div>
 </main>
 
+<!-- اختيار عضو الفريق المتواجد اللي هيستقبل رسالة الواتساب -->
+<div class="overlay" id="pickerOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3>مين هيستلم طلبك؟</h3>
+      <button class="icon-btn" onclick="closeOverlay('pickerOverlay')">×</button>
+    </div>
+    <div class="sheet-body" id="pickerBody"></div>
+  </div>
+</div>
+
 <div class="overlay" id="infoOverlay">
   <div class="sheet">
     <div class="sheet-head">
@@ -394,144 +296,25 @@
 
 <div class="toast" id="toast"></div>
 
-<div class="overlay" id="notifOverlay">
-  <div class="sheet">
-    <div class="sheet-head">
-      <h3>كل الطلبات والإشعارات</h3>
-      <button class="icon-btn" onclick="closeOverlay('notifOverlay')">×</button>
-    </div>
-    <div class="sheet-body" id="notifBody"></div>
-  </div>
-</div>
+<!-- بيانات المنيو المشتركة -->
+<script src="menu-data.js"></script>
 
 <script>
-/* ===================== DATA ===================== */
-const TEAM = [
-  { name:'مظهر علي', phone:'201021776980' },
-  { name:'حسن ابو عمر', phone:'201220522806' },
-  { name:'كريم أحمد', phone:'201200615796' },
-];
-const MANAGER = { name:'الحاج عصام عبدالله', phone:'201289507005' };
-const SUGAR_COFFEE = ['بدون سكر/سادة','مظبوط','مانو','زيادة','زيادة حلواني'];
-const SUGAR_SIMPLE = ['سكر مظبوط','سكر زيادة','سكر بره'];
-
-// Items with a flavor "مزيج" combined into the drink's name — each has its own fixed
-// pool of allowed companions and its own max number of additions.
-const TEA_MIX_POOL = ['حليب','لمون','نعناع','قرنفل'];
-const GROUP8_ITEMS = ['ينسون','قرفة','زنجبيل','لمون سخن','نعناع','كمون','شعير','كراوية'];
-
-const ITEM_MIX_CONFIG = {
-  'شاي سادة': { options: TEA_MIX_POOL, max: 4 },
-  'شاي فتلة ليبتون': { options: TEA_MIX_POOL, max: 4 },
-  'شاي فتلة عروسة': { options: TEA_MIX_POOL, max: 4 },
-  'شاي أخضر': { options: TEA_MIX_POOL, max: 4 },
-  'لمون ساقع': { options: ['نعناع','لبن'], max: 1 },
-};
-GROUP8_ITEMS.forEach(item=>{
-  ITEM_MIX_CONFIG[item] = { options: GROUP8_ITEMS.filter(x=>x!==item), max: 4 };
-});
-
-// Items with extra preparation choices shown as separate fields (not baked into the name)
-const ITEM_EXTRA_CONFIG = {
-  'كاكاو': [ {key:'milk', label:'الحليب', options:['حليب كامل','نص حليب']} ],
-  'هوت شوكلت': [ {key:'milk', label:'الحليب', options:['حليب كامل','نص حليب']} ],
-  'سحلب': [
-    {key:'milk', label:'اللبن', options:['باللبن','بدون لبن']},
-    {key:'nuts', label:'المكسرات', options:['بدون مكسرات','فول سوداني','جوز هند','زبيب','مكسرات مشكلة']}
-  ],
-};
-
-const CAT_ICON = {
-  herbs:`<svg viewBox="0 0 24 24" fill="none" stroke="#0f1a08" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8 0 15-6 15-15-9 0-15 7-15 15z"/><path d="M4 20c2-5 5-9 11-12"/></svg>`,
-  coffee:`<svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-5 0-9 4.5-9 9s4 9 9 9 9-4.5 9-9-4-9-9-9z"/><path d="M8 20c2-6 3-11 8-16"/></svg>`,
-  coffeemix:`<svg viewBox="0 0 24 24" fill="none" stroke="#2a1608" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13a3 3 0 0 1 0 6h-1"/><path d="M4 8v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8"/></svg>`,
-  cold:`<svg viewBox="0 0 24 24" fill="none" stroke="#082633" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11.5a6 6 0 1 1-12 0C6 10 12 3 12 3z"/></svg>`,
-};
-
-const CATEGORIES = [
-  { id:'herbs', title:'الأعشاب', desc:'مشروبات ساخنة طبيعية — يمكن عمل مزيج بين نوعين', type:'herb', iconBg:'var(--herb)',
-    items:['شاي سادة','شاي فتلة ليبتون','شاي فتلة عروسة','ينسون','حلبة','زنجبيل','قرفة','كركديه','لمون سخن','شاي أخضر','نعناع','كراوية','كمون','شعير','ورق جوافة','قرنفل'] },
-  { id:'coffee', title:'القهوة', desc:'حدد درجة التحلية المناسبة لك', type:'coffee', iconBg:'var(--gold)',
-    items:['قهوة سادة','قهوة محوجة','قهوة مخصوصة','قهوة غامقة','قهوة سبيشيال','قهوة وسط','قهوة بندق','قهوة فرنساوي'] },
-  { id:'coffeemix', title:'كوفي ميكس', desc:'لاتيه، نسكافيه ومشروبات ساخنة بالحليب', type:'simple', iconBg:'#B98A3E',
-    items:['كوفي ميكس','كوفي بريك','لاتيه بندق','لاتيه كلاسيك','لاتيه فانيليا','نسكافيه بلاك','نسكافيه باللبن','كاكاو','هوت شوكلت','سحلب'] },
-  { id:'cold', title:'المشروبات الساقعة', desc:'مشروبات باردة منعشة', type:'simple', iconBg:'#4E93B8',
-    items:['لمون ساقع','عناب ساقع','آيس كوفي سموزي'] },
-];
-
-const ITEM_COLOR = {
-  'شاي سادة':'#B9822E','شاي فتلة ليبتون':'#B9822E','شاي فتلة عروسة':'#A9701F',
-  'ينسون':'#CFC79A','حلبة':'#D9B23C','زنجبيل':'#D68A3B','قرفة':'#8A5A2E','كركديه':'#8B1E33','لمون سخن':'#E4C24A',
-  'شاي أخضر':'#6E8B4B','نعناع':'#5F9B5A','كراوية':'#B99A6B','كمون':'#8A7A4E','شعير':'#C9B48A','ورق جوافة':'#7C9A63','قرنفل':'#6B3A2A',
-  'قهوة سادة':'#4A2F1C','قهوة محوجة':'#5A3A22','قهوة مخصوصة':'#6B4423','قهوة غامقة':'#3A2415','قهوة سبيشيال':'#6B4423',
-  'قهوة وسط':'#7A5230','قهوة بندق':'#9C6B3E','قهوة فرنساوي':'#4A2F1C',
-  'كوفي ميكس':'#8B5E34','كوفي بريك':'#A9713D','لاتيه بندق':'#C99A5E','لاتيه كلاسيك':'#E8DCC4','لاتيه فانيليا':'#EAD9A8',
-  'نسكافيه بلاك':'#3A2415','نسكافيه باللبن':'#C9A97A','كاكاو':'#5A3A22','هوت شوكلت':'#3A2415','سحلب':'#E9DCC2',
-  'لمون ساقع':'#D9DB6E','عناب ساقع':'#7A2430','آيس كوفي سموزي':'#8B5E34',
-};
-
-function iconKind(cat, name){
-  if(name==='هوت شوكلت' || name==='سحلب') return 'latte';
-  if(name==='كاكاو') return 'coffee';
-  if(cat.type==='herb') return 'tea';
-  if(cat.type==='coffee') return 'coffee';
-  if(cat.id==='cold') return 'cold';
-  if(name.includes('لاتيه') || name.includes('باللبن')) return 'latte';
-  return 'coffee';
-}
-
-function drinkIconSVG(kind, color){
-  if(kind==='tea'){
-    return `<svg viewBox="0 0 40 40"><path d="M11 15h18l-2 20a3 3 0 0 1-3 2.6H16a3 3 0 0 1-3-2.6L11 15z" fill="${color}"/><path d="M11 15h18l-1 6H12l-1-6z" fill="#fff" opacity=".18"/><path d="M14 7c-1 2 1 3 0 5M20 7c-1 2 1 3 0 5M26 7c-1 2 1 3 0 5" stroke="#D6A24A" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/></svg>`;
-  }
-  if(kind==='coffee'){
-    return `<svg viewBox="0 0 40 40"><path d="M9 16h17v9a8.5 8.5 0 0 1-17 0v-9z" fill="${color}"/><ellipse cx="17.5" cy="16" rx="8.5" ry="2" fill="#fff" opacity=".22"/><path d="M26 18h3.5a4.2 4.2 0 0 1 0 8.4H26" fill="none" stroke="#2a1608" stroke-width="1.8"/><path d="M13 7c-1 2 1 3 0 5M19 7c-1 2 1 3 0 5" stroke="#D6A24A" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/></svg>`;
-  }
-  if(kind==='latte'){
-    return `<svg viewBox="0 0 40 40"><path d="M9 16h17v9a8.5 8.5 0 0 1-17 0v-9z" fill="${color}"/><path d="M26 18h3.5a4.2 4.2 0 0 1 0 8.4H26" fill="none" stroke="#2a1608" stroke-width="1.8"/><path d="M17.5 20a3.2 3.2 0 0 1 3.2 3.2c0 2.2-3.2 3.4-3.2 3.4s-3.2-1.2-3.2-3.4a3.2 3.2 0 0 1 3.2-3.2z" fill="#fff" opacity=".75"/></svg>`;
-  }
-  return `<svg viewBox="0 0 40 40"><path d="M12 13h16l-2 21a2.4 2.4 0 0 1-2.4 2.2H16.4A2.4 2.4 0 0 1 14 34l-2-21z" fill="${color}" opacity=".88"/><rect x="17" y="6" width="3" height="15" rx="1.2" fill="#fff" transform="rotate(14 18.5 13.5)"/><rect x="14.5" y="19" width="5" height="5" fill="#fff" opacity=".55"/><rect x="21.5" y="23" width="5" height="5" fill="#fff" opacity=".55"/></svg>`;
-}
-
 /* ===================== STATE ===================== */
 let cart = [];
-let myName = null;
+let PRICES = {};
+let db, fs;
 
-/* ===================== HELPERS ===================== */
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 function toast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
-async function storageGet(key, shared){
-  try{ const r = await window.storage.get(key, shared); return r ? JSON.parse(r.value) : null; }
-  catch(e){ return null; }
-}
-async function storageSet(key, value, shared){
-  try{ await window.storage.set(key, JSON.stringify(value), shared); return true; }
-  catch(e){ return false; }
-}
-
-/* ===================== TABS ===================== */
-function switchTab(tab){
-  document.getElementById('tabMenuBtn').classList.toggle('active', tab==='menu');
-  document.getElementById('tabTeamBtn').classList.toggle('active', tab==='team');
-  document.getElementById('menuView').style.display = tab==='menu' ? 'block':'none';
-  document.getElementById('teamView').style.display = tab==='team' ? 'block':'none';
-  document.getElementById('managerNote').textContent = tab==='team'
-    ? 'إدارة البوفيه: ' + MANAGER.name + ' — ' + MANAGER.phone.replace('20','0')
-    : '';
-  if(tab==='team') renderTeamView();
-}
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 /* ===================== MENU RENDER ===================== */
-function hexToRgba(hex, alpha){
-  const h = hex.replace('#','');
-  const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
 let activeCatId = CATEGORIES[0].id;
 
 function renderCategoryNav(){
@@ -542,10 +325,7 @@ function renderCategoryNav(){
     chip.className = 'cat-chip' + (cat.id===activeCatId ? ' active' : '');
     chip.innerHTML = `
       <div class="cat-chip-icon" style="background:${cat.iconBg}">${CAT_ICON[cat.id]}</div>
-      <div>
-        <div class="cat-chip-name">${cat.title}</div>
-        <div class="cat-chip-count">${cat.items.length} أصناف</div>
-      </div>
+      <div><div class="cat-chip-name">${cat.title}</div><div class="cat-chip-count">${cat.items.length} أصناف</div></div>
     `;
     chip.onclick = ()=> switchCategory(cat.id);
     nav.appendChild(chip);
@@ -553,29 +333,28 @@ function renderCategoryNav(){
   const activeCat = CATEGORIES.find(c=>c.id===activeCatId);
   document.getElementById('catDesc').textContent = activeCat.desc;
 }
-
-function switchCategory(id){
-  activeCatId = id;
-  renderCategoryNav();
-  renderItemsGrid();
-}
+function switchCategory(id){ activeCatId = id; renderCategoryNav(); renderItemsGrid(); }
 
 function renderItemsGrid(){
   const root = document.getElementById('categoriesRoot');
   root.innerHTML = '';
   const cat = CATEGORIES.find(c=>c.id===activeCatId);
-  cat.items.forEach((name, idx)=> root.appendChild(buildItemRow(cat, name, idx)));
+  cat.items.forEach((name, idx)=>{
+    if(PRICES[name] && PRICES[name].hidden) return;
+    root.appendChild(buildItemRow(cat, name, idx));
+  });
 }
+function renderCategories(){ renderCategoryNav(); renderItemsGrid(); }
 
-function renderCategories(){
-  renderCategoryNav();
-  renderItemsGrid();
+function priceTagHTML(name){
+  const p = PRICES[name] && PRICES[name].price;
+  if(p === undefined || p === null || p === '') return `<span class="item-price unset">السعر يتحدد قريبًا</span>`;
+  return `<span class="item-price">${p} جنيه</span>`;
 }
 
 function buildItemRow(cat, name, idx){
   const wrap = document.createElement('div');
   wrap.className = 'item';
-
   const kind = iconKind(cat, name);
   const color = ITEM_COLOR[name] || '#B98A3E';
 
@@ -585,6 +364,7 @@ function buildItemRow(cat, name, idx){
     <div class="item-text">
       <span class="item-name">${name}</span>
       <span class="item-sub">${cat.title}</span>
+      ${priceTagHTML(name)}
     </div>
     <div class="item-thumb" style="background:${hexToRgba(color,.16)}">${drinkIconSVG(kind, color)}</div>
   `;
@@ -598,7 +378,6 @@ function buildItemRow(cat, name, idx){
 
   const opts = document.createElement('div');
   opts.className = 'item-options';
-
   const sugarList = cat.id === 'coffee' ? SUGAR_COFFEE : SUGAR_SIMPLE;
   const qtyState = { qty:1, mixList:[], sugar: sugarList[0], extras:{} };
 
@@ -615,7 +394,6 @@ function buildItemRow(cat, name, idx){
   };
   opts.appendChild(qtyLine);
 
-  // Flavor mix baked into the drink name — only for items with a configured mix pool
   if(ITEM_MIX_CONFIG[name]){
     const cfg = ITEM_MIX_CONFIG[name];
     const mixLine = document.createElement('div');
@@ -623,31 +401,21 @@ function buildItemRow(cat, name, idx){
     mixLine.style.flexDirection = 'column';
     mixLine.style.alignItems = 'flex-start';
     const label = cfg.max>1 ? `مزيج مع (حتى ${cfg.max} إضافات)` : 'مزيج مع';
-    mixLine.innerHTML = `
-      <span class="field-label">${label}</span>
-      <div class="mix-chips">${cfg.options.map(h=>`<span class="mix-chip" data-val="${h}">${h}</span>`).join('')}</div>
-    `;
+    mixLine.innerHTML = `<span class="field-label">${label}</span><div class="mix-chips">${cfg.options.map(h=>`<span class="mix-chip" data-val="${h}">${h}</span>`).join('')}</div>`;
     mixLine.querySelectorAll('.mix-chip').forEach(chip=>{
       chip.onclick = ()=>{
         const val = chip.dataset.val;
-        const idx = qtyState.mixList.indexOf(val);
-        if(idx>-1){
-          qtyState.mixList.splice(idx,1);
-          chip.classList.remove('selected');
-        } else {
-          if(qtyState.mixList.length >= cfg.max){
-            toast(cfg.max===1 ? 'اختر مزيج واحد بس' : `أقصى مزيج ${cfg.max} إضافات`);
-            return;
-          }
-          qtyState.mixList.push(val);
-          chip.classList.add('selected');
+        const i = qtyState.mixList.indexOf(val);
+        if(i>-1){ qtyState.mixList.splice(i,1); chip.classList.remove('selected'); }
+        else {
+          if(qtyState.mixList.length >= cfg.max){ toast(cfg.max===1 ? 'اختر مزيج واحد بس' : `أقصى مزيج ${cfg.max} إضافات`); return; }
+          qtyState.mixList.push(val); chip.classList.add('selected');
         }
       };
     });
     opts.appendChild(mixLine);
   }
 
-  // Extra preparation choices (milk amount, nuts...) shown separately, not baked into the name
   if(ITEM_EXTRA_CONFIG[name]){
     ITEM_EXTRA_CONFIG[name].forEach(cfg=>{
       qtyState.extras[cfg.key] = cfg.options[0];
@@ -659,7 +427,6 @@ function buildItemRow(cat, name, idx){
     });
   }
 
-  // Sugar — every drink gets a sugar choice; the قهوة section uses its own 5-level scale
   const sugarLine = document.createElement('div');
   sugarLine.className = 'row-line';
   sugarLine.innerHTML = `<span class="field-label">درجة السكر</span><select>${sugarList.map(s=>`<option value="${s}">${s}</option>`).join('')}</select>`;
@@ -676,12 +443,8 @@ function buildItemRow(cat, name, idx){
     const existing = cart.find(i => i.name === fullName && i.sugar === qtyState.sugar && (i.extra||'') === extraStr);
     if(existing){
       const newQty = Math.min(MAX_QTY, existing.qty + qtyState.qty);
-      if(newQty === existing.qty){
-        toast('وصلت للحد الأقصى (10) من ' + fullName);
-      } else {
-        existing.qty = newQty;
-        toast(fullName + ' — الكمية الآن ' + existing.qty);
-      }
+      if(newQty === existing.qty){ toast('وصلت للحد الأقصى (10) من ' + fullName); }
+      else { existing.qty = newQty; toast(fullName + ' — الكمية الآن ' + existing.qty); }
     } else {
       cart.push({ uid: uid(), category: cat.title, name: fullName, qty: qtyState.qty, sugar: qtyState.sugar, extra: extraStr });
       toast(fullName + ' أُضيف للسلة');
@@ -696,7 +459,7 @@ function buildItemRow(cat, name, idx){
   return wrap;
 }
 
-/* ===================== CART PANEL (pinned) ===================== */
+/* ===================== CART PANEL ===================== */
 function renderCartPanel(){
   const panel = document.getElementById('cartPanel');
   const count = cart.reduce((s,i)=>s+i.qty,0);
@@ -713,398 +476,192 @@ function renderCartPanel(){
       const meta = [item.category, item.extra, item.sugar].filter(Boolean).join(' · ');
       const line = document.createElement('div');
       line.className = 'cart-line';
-      line.innerHTML = `
-        <div style="flex:1">
-          <div class="cart-line-name">${item.name}</div>
-          <div class="cart-line-meta">${meta}</div>
-        </div>
-        <span class="cart-line-qty">×${item.qty}</span>
-        <button class="cart-line-x" title="حذف">×</button>
-      `;
-      line.querySelector('.cart-line-x').onclick = ()=>{
-        cart = cart.filter(i=>i.uid!==item.uid);
-        renderCartPanel();
-      };
+      line.innerHTML = `<div style="flex:1"><div class="cart-line-name">${item.name}</div><div class="cart-line-meta">${meta}</div></div><span class="cart-line-qty">×${item.qty}</span><button class="cart-line-x" title="حذف">×</button>`;
+      line.querySelector('.cart-line-x').onclick = ()=>{ cart = cart.filter(i=>i.uid!==item.uid); renderCartPanel(); };
       linesRoot.appendChild(line);
     });
   }
   document.getElementById('sendOrderBtn').disabled = cart.length===0;
 }
-// ربط زر إرسال الطلب بدالة الفايربيس
-document.getElementById('sendOrderBtn').addEventListener('click', () => {
-    if (cart.length === 0) return;
-    
-    // تجميع تفاصيل الطلب وأسماء العناصر لإرسالها
-    const orderDetails = cart.map(item => `${item.name} (الكمية: ${item.qty})`).join(', ');
-    const customerName = "عميل بوفيه زاوية شميس"; // أو يمكنك جعله يكتب اسمه إذا أردت
-    
-    // استدعاء دالة الإرسال لـ Firebase
-    submitOrderToFirebase(customerName, orderDetails);
-    
-    // تفريغ السلة وتحديث الواجهة بعد الإرسال الناجح
-    cart = [];
-    renderCartPanel();
-});
 document.getElementById('cartPanelHead').addEventListener('click', ()=>{
   document.getElementById('cartPanel').classList.toggle('open');
 });
 
-/* ===================== SEND ORDER ===================== */
-async function getTargetPhone(){
-  const onDuty = await storageGet('zawya_on_duty', true);
-  return (onDuty && onDuty.phone) ? onDuty.phone : TEAM[0].phone;
+/* ===================== FIRESTORE WIRING ===================== */
+async function initFirestore(){
+  const cfgMod = await import('./firebase-config.js');
+  db = cfgMod.db;
+  fs = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+
+  fs.onSnapshot(fs.doc(db,'prices','menu'), (snap)=>{
+    PRICES = snap.exists() ? snap.data() : {};
+    renderItemsGrid();
+  });
+
+  fs.onSnapshot(fs.query(fs.collection(db,'orders'), fs.where('status','==','pending')), (snap)=>{
+    const badge = document.getElementById('bellBadge');
+    badge.textContent = snap.size;
+    badge.style.display = snap.size>0 ? 'flex' : 'none';
+  });
+
+  fs.onSnapshot(fs.collection(db,'team_status'), (snap)=>{
+    const statusMap = {};
+    snap.forEach(d=> statusMap[d.id] = d.data());
+    renderPresenceBar(statusMap);
+    updateBellVisibility();
+  });
+
+  fs.onSnapshot(fs.collection(db,'ratings'), (snap)=>{
+    const map = {};
+    snap.forEach(d=> map[d.id] = d.data());
+    renderRatingList(map);
+  });
+
+  renderRatingList({});
+  updateBellVisibility();
+}
+
+function renderPresenceBar(statusMap){
+  const bar = document.getElementById('presenceBar');
+  const online = TEAM.filter(m => statusMap[m.name] && statusMap[m.name].online);
+  bar.innerHTML = `<span class="presence-label">الفريق المتواجد الآن:</span>`;
+  if(!online.length){
+    bar.innerHTML += `<span class="presence-empty">مفيش حد متواجد دلوقتي</span>`;
+    return;
+  }
+  online.forEach(m=>{
+    bar.innerHTML += `<span class="presence-chip"><span class="presence-dot"></span> ${m.name}</span>`;
+  });
+}
+
+function updateBellVisibility(){
+  const me = localStorage.getItem('teamMember');
+  const isTeam = me && TEAM.some(t=>t.name===me);
+  document.getElementById('teamBellBtn').classList.toggle('show', !!isTeam);
+}
+document.getElementById('teamBellBtn').onclick = ()=>{ window.location.href = 'team.html'; };
+
+/* ===================== ORDER: PICK FROM ONLINE MEMBERS ONLY, THEN SEND ===================== */
+async function getOnlineMembers(){
+  try{
+    const snap = await fs.getDocs(fs.query(fs.collection(db,'team_status'), fs.where('online','==', true)));
+    const onlineNames = new Set();
+    snap.forEach(d=> onlineNames.add(d.id));
+    return shuffle(TEAM.filter(m=> onlineNames.has(m.name)));
+  }catch(e){ return []; }
 }
 
 async function sendOrder(){
   if(!cart.length){ toast('السلة فارغة'); return; }
+  const online = await getOnlineMembers();
+  const body = document.getElementById('pickerBody');
+  body.innerHTML = '';
+  if(!online.length){
+    body.innerHTML = `<div class="picker-empty">مفيش حد من الفريق متواجد دلوقتي — هيتوصل طلبك لإدارة البوفيه مباشرة.</div>`;
+    const b = document.createElement('button');
+    b.className = 'staff-pick-btn';
+    b.textContent = 'إرسال إلى الإدارة — ' + MANAGER.name;
+    b.onclick = ()=>{ closeOverlay('pickerOverlay'); finalizeSendOrder(MANAGER); };
+    body.appendChild(b);
+  } else {
+    online.forEach(m=>{
+      const b = document.createElement('button');
+      b.className = 'staff-pick-btn';
+      b.textContent = m.name;
+      b.onclick = ()=>{ closeOverlay('pickerOverlay'); finalizeSendOrder(m); };
+      body.appendChild(b);
+    });
+  }
+  document.getElementById('pickerOverlay').classList.add('show');
+}
+
+async function finalizeSendOrder(deliveryPerson){
   const custName = document.getElementById('custName').value.trim() || 'عميل';
   const custNote = document.getElementById('custNote').value.trim();
+  const items = cart.map(i=>({name:i.name, qty:i.qty, sugar:i.sugar, extra:i.extra||'', category:i.category}));
 
-  const order = {
-    id: uid(), time: new Date().toISOString(), customer: custName, note: custNote,
-    items: cart.map(i=>({name:i.name, qty:i.qty, sugar:i.sugar, extra:i.extra, category:i.category})),
-    status:'pending', claimedBy:null, claimedAt:null, history:[]
-  };
+  let orderId = uid();
+  try{
+    const docRef = await fs.addDoc(fs.collection(db,'orders'), {
+      customer: custName, note: custNote, items,
+      status:'pending', claimedBy:null, claimedAt:null, history:[],
+      sentViaWhatsappTo: { name: deliveryPerson.name, phone: deliveryPerson.phone },
+      createdAt: fs.serverTimestamp()
+    });
+    orderId = docRef.id;
+  }catch(e){
+    console.error('Firestore order error:', e);
+    toast('حصل خطأ في حفظ الطلب — هيتبعت عبر واتساب برضو');
+  }
 
-  const list = (await storageGet('zawya_orders', true)) || [];
-  list.unshift(order);
-  await storageSet('zawya_orders', list.slice(0,200), true);
-
-  let msg = `طلب جديد من بوفيه الزاوية شميس\nالعميل: ${custName}\nرقم الطلب: ${order.id}\n—————————\n`;
-  order.items.forEach(i=>{
+  let msg = `طلب جديد من بوفيه الزاوية شميس\nالعميل: ${custName}\nرقم الطلب: ${orderId}\n—————————\n`;
+  items.forEach(i=>{
     const bits = [i.extra, i.sugar].filter(Boolean).join('، ');
     msg += `• ${i.name} ×${i.qty}` + (bits?` (${bits})`:'') + '\n';
   });
   if(custNote) msg += `—————————\nملاحظات: ${custNote}\n`;
 
-  const targetPhone = await getTargetPhone();
-  window.open('https://wa.me/'+targetPhone+'?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/'+deliveryPerson.phone+'?text='+encodeURIComponent(msg), '_blank');
 
   cart = [];
   renderCartPanel();
   document.getElementById('custName').value='';
   document.getElementById('custNote').value='';
-  toast('تم إرسال الطلب — رقم الطلب '+order.id);
+  toast('تم إرسال الطلب — رقم الطلب '+orderId);
 }
+document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
 
-async function quickWaContact(){
-  const targetPhone = await getTargetPhone();
-  const msg = cart.length ? null : 'أهلاً، حابب أطلب من بوفيه الزاوية شميس 🙌';
+document.getElementById('decorWaBtn').addEventListener('click', ()=>{
   if(cart.length){ sendOrder(); return; }
-  window.open('https://wa.me/'+targetPhone+'?text='+encodeURIComponent(msg), '_blank');
-}
-document.getElementById('topWaBtn').onclick = quickWaContact;
-document.getElementById('decorWaBtn').onclick = quickWaContact;
+  window.open('https://wa.me/'+MANAGER.phone+'?text='+encodeURIComponent('أهلاً، حابب أطلب من بوفيه الزاوية شميس 🙌'), '_blank');
+});
 
-/* ===================== TEAM VIEW ===================== */
-let teamPoll = null;
-
-async function renderTeamView(){
-  myName = await storageGet('zawya_my_name', false);
-  const root = document.getElementById('teamView');
-
-  if(!myName){
-    root.innerHTML = `
-      <div class="team-login">
-        <h3 style="margin:0 0 4px">تسجيل الدخول لفريق العمل</h3>
-        <p style="color:var(--cream-dim);font-size:13px;margin:0">اختر اسمك لعرض الطلبات واستلامها</p>
-        <div class="staff-pick" id="staffPick"></div>
-      </div>`;
-    const pick = document.getElementById('staffPick');
-    TEAM.forEach(m=>{
-      const b = document.createElement('button');
-      b.className = 'staff-btn';
-      b.innerHTML = `<span class="avatar">${m.name[0]}</span><span style="flex:1;text-align:right"><div class="staff-name">${m.name}</div><div class="staff-phone">${m.phone.replace('20','0')}</div></span>`;
-      b.onclick = async ()=>{ await storageSet('zawya_my_name', m.name, false); myName = m.name; renderTeamView(); };
-      pick.appendChild(b);
+/* ===================== RATINGS ===================== */
+function renderRatingList(map){
+  const root = document.getElementById('ratingList');
+  root.innerHTML = '';
+  TEAM.forEach(m=>{
+    const data = map[m.name] || {sum:0, count:0};
+    const avg = data.count ? (data.sum / data.count).toFixed(1) : '—';
+    const row = document.createElement('div');
+    row.className = 'rating-row';
+    row.innerHTML = `
+      <div><div class="rating-name">${m.name}</div><div class="rating-avg">متوسط التقييم: ${avg} (${data.count} تقييم)</div></div>
+      <div class="stars">${[1,2,3,4,5].map(n=>`<button class="star-btn" data-n="${n}">★</button>`).join('')}</div>
+    `;
+    row.querySelectorAll('.star-btn').forEach(btn=>{
+      btn.onclick = ()=> submitRating(m.name, Number(btn.dataset.n));
     });
-    return;
-  }
-
-  root.innerHTML = `
-    <div class="team-bar">
-      <div class="team-bar-who">
-        <span class="avatar">${myName[0]}</span>
-        <div><div class="staff-name">${myName}</div>
-        <button class="icon-btn" style="font-size:11px;color:var(--cream-dim);padding:0;background:none;border:none;cursor:pointer" onclick="logoutTeam()">تبديل المستخدم</button></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="bell-btn" id="notifBellBtn" title="كل الطلبات والإشعارات">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a6 6 0 0 0-6 6v3.6c0 .7-.24 1.4-.68 1.94L4 15.5h16l-1.32-1.96a3.2 3.2 0 0 1-.68-1.94V8a6 6 0 0 0-6-6z"/><path d="M9.5 19a2.6 2.6 0 0 0 5 0"/></svg>
-          <span class="bell-badge" id="bellBadge" style="display:none">0</span>
-        </button>
-        <button class="duty-pill" id="dutyPill">...</button>
-      </div>
-    </div>
-    <div class="on-duty-banner" id="dutyBanner" style="display:none"></div>
-    <div class="stats-row" id="statsRow"></div>
-    <button class="refresh-btn" id="refreshBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0 1 14-5M20 12a8 8 0 0 1-14 5"/><path d="M14 4h4v4M10 20H6v-4"/></svg>
-      تحديث الطلبات
-    </button>
-    <div id="ordersList"></div>
-  `;
-  document.getElementById('refreshBtn').onclick = renderOrders;
-  document.getElementById('notifBellBtn').onclick = openNotifOverlay;
-
-  const onDuty = await storageGet('zawya_on_duty', true);
-  const pill = document.getElementById('dutyPill');
-  const banner = document.getElementById('dutyBanner');
-  const iAmOnDuty = onDuty && onDuty.name === myName;
-  pill.textContent = iAmOnDuty ? 'أنت في الخدمة الآن' : 'أنا في الخدمة الآن';
-  pill.className = 'duty-pill ' + (iAmOnDuty ? 'duty-on':'duty-off');
-  pill.onclick = async ()=>{
-    if(iAmOnDuty){ await storageSet('zawya_on_duty', null, true); }
-    else{ const me = TEAM.find(t=>t.name===myName); await storageSet('zawya_on_duty', {name:myName, phone: me?me.phone:''}, true); }
-    renderTeamView();
-  };
-  if(onDuty && onDuty.name){ banner.style.display='block'; banner.innerHTML = `في الخدمة الآن لاستقبال طلبات واتساب: <b>${onDuty.name}</b>`; }
-
-  await renderOrders();
-  if(teamPoll) clearInterval(teamPoll);
-  teamPoll = setInterval(()=>{ if(document.getElementById('teamView').style.display!=='none') renderOrders(); }, 9000);
-}
-
-async function logoutTeam(){ await storageSet('zawya_my_name', null, false); myName=null; renderTeamView(); }
-
-const STATUS_LABEL = {
-  pending:{cls:'st-pending', text:'جديد'}, accepted:{cls:'st-accepted', text:'قيد التجهيز'},
-  delivering:{cls:'st-delivering', text:'جاري التوصيل'},
-  hold:{cls:'st-hold', text:'معلّق'}, rejected:{cls:'st-rejected', text:'مرفوض'}, done:{cls:'st-done', text:'مكتمل'},
-  deleted:{cls:'st-done', text:'محذوف'},
-};
-
-const HISTORY_LABEL = {
-  accepted:'قبِل الطلب (قيد التجهيز)', delivering:'بدأ توصيل الطلب', hold:'علّق الطلب', rejected:'رفض الطلب',
-  done:'أكمل تسليم الطلب', deleted:'حذف الطلب', transferred:'حوّل الطلب',
-};
-
-function historyLine(h){
-  const who = HISTORY_LABEL[h.action] || h.action;
-  const t = new Date(h.time).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-  if(h.action==='transferred') return `${h.by} حوّل الطلب إلى ${h.to} — ${t}`;
-  return `${h.by} ${who} — ${t}`;
-}
-
-function renderStatsRow(fullList){
-  const row = document.getElementById('statsRow');
-  if(!row) return;
-  const counts = { pending:0, accepted:0, delivering:0, done:0 };
-  fullList.forEach(o=>{ if(counts[o.status]!==undefined) counts[o.status]++; });
-  const stats = [
-    { label:'جديد', value:counts.pending, cls:'st-pending' },
-    { label:'قيد التجهيز', value:counts.accepted, cls:'st-accepted' },
-    { label:'جاري التوصيل', value:counts.delivering, cls:'st-delivering' },
-    { label:'مكتمل', value:counts.done, cls:'st-done' },
-  ];
-  row.innerHTML = stats.map(s=>`
-    <div class="stat-card">
-      <div class="stat-value ${s.cls}">${s.value}</div>
-      <div class="stat-label">${s.label}</div>
-    </div>
-  `).join('');
-}
-
-async function renderOrders(){
-  const fullList = (await storageGet('zawya_orders', true)) || [];
-  updateBellBadge(fullList);
-  renderStatsRow(fullList);
-  const list = fullList.filter(o=>o.status!=='deleted');
-  const container = document.getElementById('ordersList');
-  if(!container) return;
-  if(!list.length){
-    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16l-1.5 11a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg><div>لا توجد طلبات حتى الآن</div></div>`;
-    return;
-  }
-  container.innerHTML = '';
-  list.forEach(order=>{
-    const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
-    const card = document.createElement('div');
-    card.className = 'order-card';
-    const timeStr = new Date(order.time).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-    card.innerHTML = `
-      <div class="order-head"><span class="status-badge ${st.cls}">${st.text}</span><span class="order-id">${timeStr} · #${order.id.slice(-5)}</span></div>
-      <div class="order-customer">${order.customer}</div>
-      ${order.note ? `<div class="order-note">${order.note}</div>` : ''}
-      <ul class="order-items">${order.items.map(i=>{ const bits=[i.extra,i.sugar].filter(Boolean).join('، '); return `<li><b>${i.name}</b> ×${i.qty}${bits? ' — '+bits:''}</li>`; }).join('')}</ul>
-    `;
-    const actionZone = document.createElement('div');
-    function addTransferControl(){
-      const others = TEAM.filter(t=>t.name!==myName);
-      const transferLine = document.createElement('div');
-      transferLine.className = 'row-line';
-      transferLine.style.marginTop = '8px';
-      transferLine.innerHTML = `<span class="field-label">تحويل لزميل</span><select>${others.map(o=>`<option value="${o.name}">${o.name}</option>`).join('')}</select><button class="claim-btn" style="background:var(--hold);color:#fff;flex:0 0 auto;min-width:60px">تحويل</button>`;
-      const tSel = transferLine.querySelector('select');
-      transferLine.querySelector('button').onclick = ()=>updateOrder(order.id,'transfer',{to:tSel.value});
-      card.appendChild(transferLine);
-    }
-    if(order.status === 'pending'){
-      actionZone.className = 'claim-row';
-      actionZone.innerHTML = `<button class="claim-btn cb-accept">قبول</button><button class="claim-btn cb-hold">تعليق</button><button class="claim-btn cb-reject">رفض</button>`;
-      const [a,h,r] = actionZone.querySelectorAll('button');
-      a.onclick=()=>updateOrder(order.id,'accepted'); h.onclick=()=>updateOrder(order.id,'hold'); r.onclick=()=>updateOrder(order.id,'rejected');
-      if(order.history && order.history.length){
-        const tLine=document.createElement('div'); tLine.className='claimed-line'; tLine.style.marginBottom='6px';
-        tLine.textContent = historyLine(order.history[order.history.length-1]);
-        card.appendChild(tLine);
-      }
-    } else if(order.status === 'hold'){
-      actionZone.className = 'claim-row';
-      actionZone.innerHTML = `<button class="claim-btn cb-accept">قبول</button><button class="claim-btn cb-reject">رفض</button>`;
-      const [a,r] = actionZone.querySelectorAll('button');
-      a.onclick=()=>updateOrder(order.id,'accepted'); r.onclick=()=>updateOrder(order.id,'rejected');
-      const line=document.createElement('div'); line.className='claimed-line'; line.style.marginBottom='6px';
-      line.innerHTML = `معلّق بواسطة <b>${order.claimedBy||'-'}</b>`; card.appendChild(line);
-    } else if(order.status === 'accepted'){
-      const line=document.createElement('div'); line.className='claimed-line'; line.style.marginBottom='8px';
-      line.innerHTML = `قيد التجهيز بواسطة <b>${order.claimedBy}</b>`; card.appendChild(line);
-      if(order.claimedBy === myName){
-        actionZone.className='claim-row';
-        actionZone.innerHTML = `<button class="claim-btn" style="background:var(--cold);color:#fff">بدء التوصيل</button>`;
-        actionZone.querySelector('button').onclick = ()=>updateOrder(order.id,'delivering');
-        addTransferControl();
-      }
-    } else if(order.status === 'delivering'){
-      const line=document.createElement('div'); line.className='claimed-line'; line.style.marginBottom='8px';
-      line.innerHTML = `جاري التوصيل بواسطة <b>${order.claimedBy}</b>`; card.appendChild(line);
-      if(order.claimedBy === myName){
-        actionZone.className='claim-row';
-        actionZone.innerHTML = `<button class="claim-btn cb-done">تم التسليم</button>`;
-        actionZone.querySelector('button').onclick = ()=>updateOrder(order.id,'done');
-        addTransferControl();
-      }
-    } else if(order.status === 'rejected'){
-      const line=document.createElement('div'); line.className='claimed-line';
-      line.innerHTML = `تم الرفض بواسطة <b>${order.claimedBy}</b>`; card.appendChild(line);
-    } else if(order.status === 'done'){
-      const line=document.createElement('div'); line.className='claimed-line';
-      line.innerHTML = `اكتمل بواسطة <b>${order.claimedBy}</b>`; card.appendChild(line);
-    }
-    if(order.status !== 'done'){
-      const delBtn = document.createElement('button');
-      delBtn.className = 'refresh-btn';
-      delBtn.style.marginTop = '10px';
-      delBtn.style.marginBottom = '0';
-      delBtn.style.color = 'var(--bad)';
-      delBtn.textContent = 'حذف الطلب';
-      delBtn.onclick = ()=>updateOrder(order.id,'delete');
-      card.appendChild(actionZone);
-      card.appendChild(delBtn);
-    } else {
-      card.appendChild(actionZone);
-    }
-    container.appendChild(card);
+    root.appendChild(row);
   });
 }
 
-function updateBellBadge(fullList){
-  const badge = document.getElementById('bellBadge');
-  if(!badge) return;
-  const count = fullList.filter(o=>o.status==='pending').length;
-  badge.textContent = count;
-  badge.style.display = count>0 ? 'flex' : 'none';
+async function submitRating(name, stars){
+  if(!db){ toast('لسه بيتحمّل، جرب تاني بعد ثانية'); return; }
+  try{
+    await fs.setDoc(fs.doc(db,'ratings',name), {
+      sum: fs.increment(stars), count: fs.increment(1)
+    }, { merge:true });
+    toast('شكرًا لتقييمك ' + name);
+  }catch(e){ console.error(e); toast('حصل خطأ، جرب تاني'); }
 }
 
-function openNotifOverlay(){
-  renderNotifOverlay();
-  document.getElementById('notifOverlay').classList.add('show');
-}
-function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
-
-async function renderNotifOverlay(){
-  const list = (await storageGet('zawya_orders', true)) || [];
-  const body = document.getElementById('notifBody');
-  if(!list.length){
-    body.innerHTML = `<div class="empty-state"><div>لا توجد أي طلبات بعد</div></div>`;
-    return;
-  }
-  body.innerHTML = '';
-  list.forEach(order=>{
-    const st = STATUS_LABEL[order.status] || STATUS_LABEL.pending;
-    const timeStr = new Date(order.time).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-    const card = document.createElement('div');
-    card.className = 'order-card';
-    card.innerHTML = `
-      <div class="order-head"><span class="status-badge ${st.cls}">${st.text}</span><span class="order-id">${timeStr} · #${order.id.slice(-5)}</span></div>
-      <div class="order-customer">${order.customer}</div>
-      <ul class="order-items">${order.items.map(i=>{ const bits=[i.extra,i.sugar].filter(Boolean).join('، '); return `<li><b>${i.name}</b> ×${i.qty}${bits? ' — '+bits:''}</li>`; }).join('')}</ul>
-    `;
-    if(order.history && order.history.length){
-      const hist = document.createElement('ul');
-      hist.className = 'order-items';
-      hist.style.marginTop = '4px';
-      hist.style.borderTop = '1px dashed rgba(32,41,31,.12)';
-      hist.style.paddingTop = '6px';
-      order.history.forEach(h=>{
-        const li = document.createElement('li');
-        li.textContent = historyLine(h);
-        hist.appendChild(li);
-      });
-      card.appendChild(hist);
-    }
-    body.appendChild(card);
-  });
-}
-
-async function updateOrder(orderId, action, extra){
-  const list = (await storageGet('zawya_orders', true)) || [];
-  const idx = list.findIndex(o=>o.id===orderId);
-  if(idx===-1) return;
-  const order = list[idx];
-  if(!order.history) order.history = [];
-  const time = new Date().toISOString();
-
-  if(action==='done'){
-    order.status='done';
-    order.history.push({action:'done', by:myName, time});
-  } else if(action==='delete'){
-    order.status='deleted';
-    order.history.push({action:'deleted', by:myName, time});
-  } else if(action==='transfer'){
-    order.status='pending';
-    order.claimedBy=null;
-    order.history.push({action:'transferred', by:myName, to:extra.to, time});
-  } else {
-    order.status=action; // accepted | hold | rejected
-    order.claimedBy=myName;
-    order.claimedAt=time;
-    order.history.push({action:action, by:myName, time});
-  }
-  await storageSet('zawya_orders', list, true);
-  toast('تم تحديث حالة الطلب');
-  renderOrders();
-}
-
-/* ===================== FOOTER / INFO SHEETS ===================== */
+/* ===================== FOOTER INFO SHEETS ===================== */
 const INFO_CONTENT = {
-  policy: {
-    title:'سياسة الاستخدام',
-    body:`
+  policy: { title:'سياسة الاستخدام', body:`
       <p>التطبيق مخصص لطلب المشروبات من بوفيه الزاوية شميس عبر واتساب فقط.</p>
       <p>يقوم العميل باختيار المشروبات المطلوبة، وعند إرسال الطلب تصل التفاصيل مباشرة لفريق العمل عبر واتساب ليتم تجهيزه.</p>
-      <p>البيانات التي يدخلها العميل (الاسم والملاحظات) تُستخدم فقط لتجهيز طلبه ولا تُشارك مع أي جهة خارجية.</p>
-    `
-  },
-  terms: {
-    title:'الشروط والأحكام',
-    body:`
+      <p>البيانات التي يدخلها العميل (الاسم والملاحظات) تُستخدم فقط لتجهيز طلبه ولا تُشارك مع أي جهة خارجية.</p>` },
+  terms: { title:'الشروط والأحكام', body:`
       <p>الأسعار والتوافر قابلان للتغيير حسب المتاح في البوفيه وقت الطلب.</p>
-      <p>يُعتبر الطلب مؤكدًا بعد وصول رسالة الواتساب وقبول أحد أعضاء الفريق له داخل التطبيق.</p>
+      <p>يُعتبر الطلب مؤكدًا بعد وصول رسالة الواتساب وقبول أحد أعضاء الفريق له.</p>
       <p>لا يمكن إلغاء الطلب بعد بدء تجهيزه — يرجى التواصل مباشرة مع الفريق عبر واتساب لأي تعديل عاجل.</p>
-      <p>خدمة التوصيل السريع متاحة حسب المنطقة والوقت، ويتم تأكيدها من فريق العمل عند الطلب.</p>
-    `
-  },
-  support: {
-    title:'خدمة العملاء',
-    body:`
+      <p>خدمة التوصيل السريع متاحة حسب المنطقة والوقت، ويتم تأكيدها من فريق العمل عند الطلب.</p>` },
+  support: { title:'خدمة العملاء', body:`
       <p>لأي استفسار أو مشكلة في طلبك، تواصل مباشرة مع فريق البوفيه عبر واتساب من داخل التطبيق.</p>
       <p>إدارة البوفيه: <b>${MANAGER.name}</b> — ${MANAGER.phone.replace('20','0')}</p>
-      <p>البريد الإلكتروني: <a href="mailto:abdeenali520@gmail.com" style="color:var(--gold-dark);font-weight:700">abdeenali520@gmail.com</a></p>
-    `
-  },
+      <p>البريد الإلكتروني: <a href="mailto:abdeenali520@gmail.com" style="color:var(--gold-dark);font-weight:700">abdeenali520@gmail.com</a></p>` },
 };
-
 function showInfo(type){
   const info = INFO_CONTENT[type];
   if(!info) return;
@@ -1115,24 +672,11 @@ function showInfo(type){
 
 const footerYearEl = document.getElementById('footerYear');
 if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
-// دالة إرسال الطلب إلى قاعدة البيانات Firestore
-async function submitOrderToFirebase(customerName, orderDetails) {
-    try {
-        const docRef = await addDoc(collection(db, "orders"), {
-            customerName: customerName,
-            orderDetails: orderDetails,
-            createdAt: serverTimestamp()
-        });
-        console.log("تم إرسال الطلب بنجاح برقم: ", docRef.id);
-        alert("تم إرسال طلبك بنجاح! سيتم تجهيزه فوراً.");
-    } catch (e) {
-        console.error("خطأ أثناء إرسال الطلب: ", e);
-        alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مرة أخرى.");
-    }
-}
+
 /* ===================== INIT ===================== */
 renderCategories();
 renderCartPanel();
+initFirestore();
 </script>
 </body>
 </html>
