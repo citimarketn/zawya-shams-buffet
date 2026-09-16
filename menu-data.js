@@ -6,14 +6,14 @@
    ============================================================ */
 
 const TEAM = [
-  { name:'مظهر علي',   phone:'201021776980' },
+  { name:'مظهر علي', phone:'201021776980' },
   { name:'حسن ابو عمر', phone:'201220522806' },
-  { name:'كريم محمد',   phone:'201200615769' },
+  { name:'كريم أحمد', phone:'201200615796' },
 ];
 const MANAGER = { name:'الحاج عصام عبدالله', phone:'201289507005' };
 
-// الاسمين المسموح لهم وحدهم بتعديل الأسعار وإخفاء/تعديل/حذف المنتجات
-const PRICE_EDITOR_NAMES = ['حسن ابو عمر', 'مظهر علي'];
+// الاسم بالظبط لعضو الفريق المسموح له وحده بتعديل الأسعار
+const PRICE_EDITOR_NAME = 'حسن ابو عمر';
 
 const SUGAR_COFFEE = ['بدون سكر/سادة','مظبوط','مانو','زيادة','زيادة حلواني'];
 const SUGAR_SIMPLE = ['سكر مظبوط','سكر زيادة','سكر بره'];
@@ -97,12 +97,4 @@ function hexToRgba(hex, alpha){
   const h = hex.replace('#','');
   const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
   return `rgba(${r},${g},${b},${alpha})`;
-}
-
-// يطبّع رقم الواتساب المكتوب بأي صيغة (01xxxxxxxxx أو 1xxxxxxxxx أو 201xxxxxxxxx) لمقارنته برقم مسجّل
-function normalizePhone(p){
-  let d = (p||'').replace(/\D/g,'');
-  if(d.startsWith('20')) d = d.slice(2);
-  if(d.startsWith('0')) d = d.slice(1);
-  return d;
 }
