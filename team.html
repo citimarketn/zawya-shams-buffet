@@ -2,192 +2,595 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دخول فريق العمل — بوفيه الزاوية شميس</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>الزاوية شميس — بوفيه المشروبات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F3EDDF; --panel:#FFFFFF; --panel-2:#F6F1E4;
     --cream:#20291F; --cream-dim:#767F70;
     --gold:#1F6E4A; --gold-dark:#163F2C;
-    --bad:#B0463C; --green-online:#2be374;
-    --radius-lg:20px; --shadow:0 10px 26px rgba(32,41,31,.12);
+    --herb:#7C9256; --cold:#3D84A8; --bad:#B0463C; --ink:#20291F;
+    --radius-lg:20px; --radius-sm:12px;
+    --shadow:0 10px 26px rgba(32,41,31,.12);
   }
   *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
   body{
-    background:var(--bg); color:var(--cream); font-family:'IBM Plex Sans Arabic', sans-serif;
-    min-height:100vh; display:flex; align-items:center; justify-content:center; margin:0; padding:16px;
+    background:
+      radial-gradient(1100px 550px at 15% -8%, rgba(31,110,74,.07), transparent 60%),
+      radial-gradient(900px 500px at 105% 10%, rgba(224,138,62,.08), transparent 55%),
+      var(--bg);
+    color:var(--cream); font-family:'IBM Plex Sans Arabic', sans-serif; min-height:100vh;
   }
-  .card{
-    background:var(--panel); width:100%; max-width:440px; padding:24px; border-radius:var(--radius-lg);
-    box-shadow:var(--shadow); border:1px solid rgba(31,110,74,.15);
+  h1,h2,h3,.display{font-family:'Cairo', sans-serif;}
+
+  /* زر صندوق الإشعارات العائم لفريق العمل فقط */
+  .floating-bell{
+    position:fixed; top:20px; left:20px; width:52px; height:52px;
+    background:linear-gradient(155deg, var(--gold), var(--gold-dark));
+    color:#fff; border-radius:50%; display:none; align-items:center; justify-content:center;
+    box-shadow:0 8px 20px rgba(22,63,44,.35); cursor:pointer; z-index:100; border:2px solid #fff;
+    transition:transform .2s;
   }
-  h2{font-family:'Cairo'; font-size:20px; color:var(--gold-dark); margin-top:0; text-align:center;}
-  label{display:block; font-size:12.5px; color:var(--cream-dim); margin:12px 0 5px; font-weight:600;}
-  input{width:100%; padding:11px; background:var(--panel-2); border:1px solid rgba(32,41,31,.15); border-radius:10px; font-family:inherit; font-size:14px; color:var(--cream); text-align:center;}
-  input[type="password"]{letter-spacing:6px; font-weight:bold;}
-  .btn{width:100%; background:linear-gradient(155deg, var(--gold), var(--gold-dark)); color:#fff; border:none; padding:12px; border-radius:11px; font-family:inherit; font-weight:800; font-size:14px; cursor:pointer; margin-top:16px; box-shadow:0 6px 16px rgba(22,63,44,.25);}
-  .back-link{display:block; text-align:center; margin-top:14px; color:var(--cream-dim); text-decoration:none; font-size:12.5px; font-weight:700;}
+  .floating-bell.show{display:flex;}
+  .floating-bell:hover{transform:scale(1.05);}
+  .floating-bell svg{width:24px; height:24px; fill:currentColor;}
+  .bell-badge{
+    position:absolute; top:-2px; right:-2px; background:var(--bad); color:#fff;
+    font-size:11px; font-weight:800; min-width:20px; height:20px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; padding:0 5px; border:2px solid #fff;
+  }
+
+  .hero{padding:22px 16px 6px;position:relative;}
+  .hero-inner{max-width:640px;margin:0 auto;}
+  .brand-row{display:flex;align-items:center;gap:13px;}
+  .brand-mark{width:52px;height:52px;border-radius:15px;flex-shrink:0;background:linear-gradient(155deg, var(--gold), var(--gold-dark));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);}
+  .brand-mark svg{width:30px;height:30px;}
+  h1.title{font-size:24px;margin:0;font-weight:900;color:var(--cream);}
+  .subtitle{margin:2px 0 0;color:var(--cream-dim);font-size:13px;}
+  .addr{margin-top:12px;display:flex;gap:8px;align-items:flex-start;color:var(--cream-dim);font-size:12.5px;line-height:1.7;}
+  .addr svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;opacity:.85}
+
+  .decor{max-width:640px;margin:14px auto 0;padding:26px 18px 22px;background:var(--panel);border:1px solid rgba(31,110,74,.15);border-radius:26px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+  .decor::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg, rgba(31,110,74,.03) 0 2px, transparent 2px 22px);pointer-events:none;}
+  .decor-illustration{width:200px;height:200px;margin:0 auto 6px;position:relative;}
+  .decor-illustration svg{width:100%;height:100%;}
+  .tag-bubble{position:absolute;background:#fff;border:1px solid rgba(31,110,74,.22);border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:800;color:var(--gold-dark);box-shadow:0 6px 14px rgba(32,41,31,.14);white-space:nowrap;}
+  .tag-top{top:2px;right:0;transform:rotate(-5deg);}
+  .tag-bottom{bottom:14px;left:-6px;transform:rotate(4deg);}
+  .overline{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--cream-dim);font-size:12.5px;font-weight:600;margin:2px 0 6px;position:relative;}
+  .overline::before, .overline::after{content:"";width:16px;height:1px;background:rgba(32,41,31,.25);}
+  .tagline-1{font-family:'Cairo';font-weight:900;font-size:22px;color:var(--gold-dark);margin:2px 0 6px;position:relative;}
+  .tagline-2{font-size:13px;color:var(--cream-dim);font-weight:600;margin:0 0 16px;position:relative;}
+  .decor-cta{position:relative;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(155deg, var(--gold), var(--gold-dark));color:#fff;border:none;padding:12px 24px;border-radius:30px;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 18px rgba(22,63,44,.3);}
+  .decor-cta svg{width:17px;height:17px;fill:#fff;}
+
+  main{max-width:640px;margin:0 auto;padding:20px 16px 30px;}
+
+  .cart-panel{background:var(--panel);border:1px solid rgba(214,162,74,.22);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden;}
+  .cart-panel-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:rgba(214,162,74,.08);cursor:pointer;}
+  .cart-panel-head svg{width:20px;height:20px;color:var(--gold);flex-shrink:0;}
+  .cart-panel-head h2{margin:0;font-size:15.5px;flex:1;}
+  .cart-count-pill{background:var(--gold);color:#fff;font-weight:800;font-size:12px;padding:3px 10px;border-radius:20px;}
+  .chev-cart{width:15px;height:15px;color:var(--cream-dim);transition:transform .2s;}
+  .cart-panel.open .chev-cart{transform:rotate(180deg);}
+  .cart-panel-body{display:none;padding:4px 16px 16px;}
+  .cart-panel.open .cart-panel-body{display:block;}
+  .cart-panel.has-items .cart-panel-head{background:rgba(214,162,74,.16);}
+
+  .cart-line{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(32,41,31,.07);}
+  .cart-line:last-child{border-bottom:none;}
+  .cart-line-name{font-weight:700;font-size:13.5px;color:var(--cream);}
+  .cart-line-meta{font-size:11.5px;color:var(--cream-dim);margin-top:1px;}
+  .cart-line-qty{font-size:12.5px;font-weight:800;color:var(--gold);background:rgba(214,162,74,.14);padding:3px 9px;border-radius:20px;}
+  .cart-line-x{background:none;border:none;color:var(--bad);font-size:20px;line-height:1;cursor:pointer;padding:2px 4px;}
+  .cart-empty-msg{color:var(--cream-dim);font-size:13px;text-align:center;padding:16px 4px 6px;}
+
+  label.field{display:block;font-size:12px;color:var(--cream-dim);margin:12px 0 5px;}
+  input[type=text], textarea, select{font-family:inherit;background:var(--panel-2);color:var(--cream);border:1px solid rgba(32,41,31,.15);border-radius:10px;padding:9px 11px;font-size:13.5px;width:100%;}
+  textarea{resize:vertical;min-height:56px;}
+
+  .primary-btn{width:100%;border:none;background:linear-gradient(155deg,#2be374,#1fae52);color:#062c14;padding:13px;border-radius:13px;font-family:inherit;font-weight:800;font-size:14.5px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-top:12px;}
+  .primary-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .primary-btn svg{width:18px;height:18px;fill:currentColor;}
+
+  .section-label{font-size:12.5px;color:var(--cream-dim);margin:4px 2px 10px;font-weight:600;}
+  .cat-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .cat-chip{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid rgba(32,41,31,.08);border-radius:16px;padding:12px;cursor:pointer;text-align:right;box-shadow:0 4px 12px rgba(32,41,31,.05);}
+  .cat-chip-icon{width:36px;height:36px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .cat-chip-icon svg{width:19px;height:19px;}
+  .cat-chip-name{font-size:13px;font-weight:800;color:var(--cream);}
+  .cat-chip-count{font-size:10.5px;color:var(--cream-dim);}
+  .cat-chip.active{background:linear-gradient(155deg, var(--gold), var(--gold-dark));border-color:transparent;box-shadow:0 8px 18px rgba(22,63,44,.28);}
+  .cat-chip.active .cat-chip-name{color:#fff;}
+  .cat-chip.active .cat-chip-count{color:rgba(255,255,255,.75);}
+  .cat-chip.active .cat-chip-icon{background:rgba(255,255,255,.22)!important;}
+  .cat-chip.active .cat-chip-icon svg{filter:brightness(0) invert(1);}
+  .cat-desc{font-size:12.5px;color:var(--cream-dim);margin:0 2px 12px;}
+
+  .items-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .item{background:var(--panel);border-radius:16px;padding:12px;border:1px solid rgba(32,41,31,.07);box-shadow:0 4px 10px rgba(32,41,31,.04);display:flex;flex-direction:column;gap:8px;}
+  .item.expanded{grid-column:1/-1;}
+  .item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .item-thumb{width:42px;height:42px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .item-thumb svg{width:26px;height:26px;}
+  .item-text{flex:1;min-width:0;}
+  .item-name{font-size:13.5px;font-weight:800;color:var(--cream);display:block;line-height:1.35;}
+  .item-sub{font-size:10.5px;color:var(--cream-dim);margin-top:1px;display:block;}
+  .item-price{font-size:11.5px;font-weight:800;color:var(--gold-dark);margin-top:3px;display:block;}
+  .item-price.unset{color:var(--cream-dim);font-weight:600;font-style:italic;}
+  .add-btn{border:none;background:var(--panel-2);color:var(--gold-dark);font-family:inherit;font-weight:800;font-size:12px;padding:8px 10px;border-radius:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:5px;}
+  .add-btn::before{content:"+";font-size:14px;font-weight:900;line-height:1;}
+  .add-btn:hover{background:var(--gold);color:#fff;}
+  .item.expanded .add-btn{background:var(--gold);color:#fff;}
+
+  .item-options{display:none;margin-top:2px;padding:12px;background:var(--panel-2);border-radius:var(--radius-sm);}
+  .item.expanded .item-options{display:block;}
+  .row-line{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .row-line:last-child{margin-bottom:0;}
+  .field-label{font-size:12px;color:var(--cream-dim);min-width:60px;}
+  .mix-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .mix-chip{border:1px solid rgba(32,41,31,.16);background:#fff;color:var(--cream);font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:14px;cursor:pointer;user-select:none;}
+  .mix-chip.selected{background:var(--gold);color:#fff;border-color:transparent;}
+  .row-line select{flex:1;min-width:0;}
+  .stepper{display:flex;align-items:center;background:#fff;border-radius:10px;overflow:hidden;border:1px solid rgba(32,41,31,.15);}
+  .stepper button{width:32px;height:32px;border:none;background:transparent;color:var(--cream);font-size:17px;cursor:pointer;}
+  .stepper span{width:26px;text-align:center;font-weight:700;font-size:14px;}
+  .confirm-add{width:100%;margin-top:10px;background:var(--gold);color:#fff;border:none;padding:10px;border-radius:10px;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;}
+
+  .manager-note{font-size:11px;color:var(--cream-dim);text-align:center;padding:16px 10px 4px;}
+
+  .site-footer{margin-top:22px;padding:18px 10px 8px;text-align:center;border-top:1px solid rgba(32,41,31,.08);}
+  .footer-links{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .footer-links button{background:none;border:none;color:var(--gold-dark);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:2px;}
+  .footer-dot{color:var(--cream-dim);font-size:12px;}
+  .footer-copy{font-size:11.5px;color:var(--cream-dim);margin:0 0 4px;}
+  .footer-credit{font-size:11px;color:var(--cream-dim);margin:0;}
+  .footer-credit a{color:var(--gold-dark);text-decoration:none;font-weight:700;}
+
+  .overlay{position:fixed;inset:0;background:rgba(20,26,20,.55);z-index:90;display:none;align-items:flex-end;justify-content:center;}
+  .overlay.show{display:flex;}
+  .sheet{background:var(--bg);width:100%;max-width:640px;border-radius:22px 22px 0 0;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(32,41,31,.3);}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(32,41,31,.08);background:var(--panel);border-radius:22px 22px 0 0;}
+  .sheet-head h3{margin:0;font-size:16px;color:var(--cream);}
+  .sheet-body{padding:14px 18px;overflow-y:auto;}
+  .sheet-body p{font-size:13px;line-height:1.8;color:var(--cream);margin:0 0 12px;}
+  .sheet-body p:last-child{margin-bottom:0;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold-dark);color:#fff;padding:11px 18px;border-radius:30px;font-size:13px;font-weight:700;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
   
-  /* قائمة حالة الفريق */
-  .team-status-box{margin-top:22px; border-top:1px solid rgba(32,41,31,.1); padding-top:14px;}
-  .team-status-title{font-size:13px; font-weight:800; color:var(--gold-dark); margin-bottom:10px; text-align:center;}
-  .team-member-row{display:flex; align-items:center; justify-content:space-between; background:var(--panel-2); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; font-weight:700;}
-  .status-badge{display:flex; align-items:center; gap:6px; font-size:11.5px;}
-  .dot{width:9px; height:9px; border-radius:50%;}
-  .dot.online{background:var(--green-online); box-shadow:0 0 8px var(--green-online);}
-  .dot.offline{background:var(--cream-dim); opacity:0.5;}
-  .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--gold-dark); color:#fff; padding:10px 16px; border-radius:20px; font-size:12.5px; font-weight:700; opacity:0; pointer-events:none; transition:opacity .2s;}
-  .toast.show{opacity:1;}
+  /* تنسيق مصغّر لطلبات صندوق الفريق داخل النافذة المنبثقة */
+  .order-card-mini{background:var(--panel); border:1px solid rgba(32,41,31,.1); border-radius:12px; padding:12px; margin-bottom:10px;}
+  .order-card-mini .head{display:flex; justify-content:space-between; font-weight:800; font-size:13px; color:var(--gold-dark); margin-bottom:6px;}
+  .order-card-mini .items{font-size:12.5px; color:var(--cream); margin-bottom:8px; line-height:1.5;}
+  .order-card-mini button{width:100%; background:var(--gold); color:#fff; border:none; padding:8px; border-radius:8px; font-family:inherit; font-weight:700; font-size:12px; cursor:pointer;}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:rgba(32,41,31,.15);border-radius:10px;}
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>🔐 دخول فريق العمل</h2>
-  
-  <div id="loginForm">
-    <label>رقم الواتساب (مثال: 010xxxxxxxx)</label>
-    <input type="text" id="whatsappInput" placeholder="أدخل رقم الواتساب المسجل">
-    
-    <label>الرقم السري (4 أرقام)</label>
-    <input type="password" id="pinInput" maxlength="4" placeholder="••••">
-    
-    <button class="btn" id="loginBtn">دخول وتفعيل عبر الواتساب</button>
-  </div>
-
-<!-- شريط حالات أعضاء الفريق -->
-<div class="team-status-box" style="margin-top:22px; border-top:1px solid rgba(32,41,31,.1); padding-top:14px;">
-  <div style="font-size:13px; font-weight:800; color:var(--gold-dark); margin-bottom:10px; text-align:center;">حالة أعضاء الفريق</div>
-  <div id="teamStatusList">جاري تحميل حالة الأعضاء...</div>
+<!-- زر صندوق الإشعارات العائم (يظهر لفريق العمل فقط المسجلين عبر team.html) -->
+<div class="floating-bell" id="teamBellBtn" title="صندوق طلبات فريق العمل">
+  <svg viewBox="0 0 24 24"><path d="M12 2a6 6 0 0 0-6 6v3.6c0 .7-.24 1.4-.68 1.94L4 15.5h16l-1.32-1.96a3.2 3.2 0 0 1-.68-1.94V8a6 6 0 0 0-6-6z"/><path d="M9.5 19a2.6 2.6 0 0 0 5 0"/></svg>
+  <span class="bell-badge" id="bellBadge" style="display:none;">0</span>
 </div>
-  <div id="dashboardView" style="display:none; text-align:center;">
-    <p id="welcomeMsg" style="font-weight:800; color:var(--gold-dark); font-size:15px; margin-bottom:10px;"></p>
-    <button class="btn" id="logoutBtn" style="background:var(--bad);">تسجيل خروج</button>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13a3 3 0 0 1 0 6h-1"/><path d="M4 8v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8"/><path d="M8 3c-.5 1 .5 1.5 0 2.5S7 7 7.5 8"/><path d="M12 3c-.5 1 .5 1.5 0 2.5S11 7 11.5 8"/></svg>
+      </div>
+      <div>
+        <h1 class="title">الزاوية شميس</h1>
+        <p class="subtitle">بوفيه مشروبات ساخنة وباردة</p>
+      </div>
+    </div>
+    <div class="addr">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+      <span>مصر، محافظة السويس، الأربعين، شارع شميس الوسطاني</span>
+    </div>
+  </div>
+</div>
+
+<div class="decor">
+  <div class="decor-illustration">
+    <div class="tag-bubble tag-top">من قلب شميس</div>
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="92" fill="#FBF6EA" stroke="#1F6E4A" stroke-width="3"/>
+      <path d="M64 66c-3 5 3 7 0 12M78 62c-3 5 3 7 0 12M92 66c-3 5 3 7 0 12" stroke="#1F6E4A" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/>
+      <ellipse cx="98" cy="152" rx="48" ry="7" fill="#20291F" opacity=".08"/>
+      <path d="M58 88h66l-7 52a9 9 0 0 1-9 8H74a9 9 0 0 1-9-8L58 88z" fill="#C9723A"/>
+      <path d="M58 88h66l-2.6 13H60.6L58 88z" fill="#fff" opacity=".16"/>
+      <path d="M122 100h13a15 15 0 0 1 0 30h-13" fill="none" stroke="#1F6E4A" stroke-width="5"/>
+    </svg>
+    <div class="tag-bubble tag-bottom">يارب ياهادي</div>
+  </div>
+  <p class="overline">اللهم صلِّ على النبي محمد ﷺ</p>
+  <div class="tagline-1">كوبية تظبط مزاجك.</div>
+  <div class="tagline-2">اطلب الآن — خدمة توصيل سريعة</div>
+  <button class="decor-cta" id="decorOrderDirectBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    اطلب مباشرة من المنيو بالأسفل
+  </button>
+</div>
+
+<main>
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-panel-head" id="cartPanelHead">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16l-1.5 11a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2L4 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+      <h2>سلة طلبك</h2>
+      <span class="cart-count-pill" id="cartCountPill">0</span>
+      <svg class="chev-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="cart-panel-body" id="cartPanelBody">
+      <div id="cartLines"></div>
+      <label class="field">اسمك أو مكانك</label>
+      <input type="text" id="custName" placeholder="اكتب اسمك أو رقم الغرفة/المحل">
+      <label class="field">ملاحظات على الطلب (اختياري)</label>
+      <textarea id="custNote" placeholder="مثال: بدون سكر زيادة..."></textarea>
+      <button class="primary-btn" id="sendOrderBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg>
+        تأكيد وإرسال الطلب للبوفيه
+      </button>
+    </div>
   </div>
 
-  <a href="index.html" class="back-link">← العودة للرئيسية (المنيو)</a>
+  <p class="section-label">اختر من الأقسام التالية</p>
+  <div class="cat-nav" id="catNav"></div>
+  <p class="cat-desc" id="catDesc"></p>
+  <div class="items-grid" id="categoriesRoot"></div>
 
- 
-<!-- ملفات البيانات والاتصال بقاعدة البيانات -->
+  <div style="text-align:center; margin-top:16px;">
+    <button onclick="window.location.href='team.html'" style="background:var(--panel-2); border:1px solid rgba(32,41,31,.15); color:var(--cream); padding:10px 18px; border-radius:12px; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;">
+      🔐 دخول فريق العمل / إدارة الطلبات
+    </button>
+  </div>
+
+  <div class="manager-note">إدارة البوفيه: الحاج عصام عبدالله</div>
+
+  <div class="site-footer">
+    <div class="footer-links">
+      <button onclick="showInfo('policy')">سياسة الاستخدام</button>
+      <span class="footer-dot">·</span>
+      <button onclick="showInfo('terms')">الشروط والأحكام</button>
+      <span class="footer-dot">·</span>
+      <button onclick="showInfo('support')">خدمة العملاء</button>
+    </div>
+    <p class="footer-copy">© <span id="footerYear"></span> بوفيه الزاوية شميس — جميع الحقوق محفوظة</p>
+    <p class="footer-credit">تصميم وتطوير: عابدين علي عابدين عبدالله · <a href="mailto:abdeenali520@gmail.com">abdeenali520@gmail.com</a></p>
+  </div>
+</main>
+
+<!-- نافذة صندوق إشعارات الطلبات للفريق -->
+<div class="overlay" id="teamOrdersOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3>🔔 طلبات العملاء الواردة للبوفيه</h3>
+      <button class="icon-btn" onclick="closeOverlay('teamOrdersOverlay')" style="background:none;border:none;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div class="sheet-body" id="teamOrdersBody">
+      <p>جاري تحميل الطلبات...</p>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="infoOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="infoTitle"></h3>
+      <button class="icon-btn" onclick="closeOverlay('infoOverlay')" style="background:none;border:none;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div class="sheet-body" id="infoBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script src="menu-data.js"></script>
-<script type="module">
-  import { db } from './firebase-config.js';
-  import * as fs from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-  function toast(msg){
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'), 2200);
+<script>
+let cart = [];
+let PRICES = {};
+let db, fs;
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+
+let activeCatId = CATEGORIES[0].id;
+
+function renderCategoryNav(){
+  const nav = document.getElementById('catNav');
+  nav.innerHTML = '';
+  CATEGORIES.forEach(cat=>{
+    const chip = document.createElement('div');
+    chip.className = 'cat-chip' + (cat.id===activeCatId ? ' active' : '');
+    chip.innerHTML = `
+      <div class="cat-chip-icon" style="background:${cat.iconBg}">${CAT_ICON[cat.id]}</div>
+      <div><div class="cat-chip-name">${cat.title}</div><div class="cat-chip-count">${cat.items.length} أصناف</div></div>
+    `;
+    chip.onclick = ()=> switchCategory(cat.id);
+    nav.appendChild(chip);
+  });
+  const activeCat = CATEGORIES.find(c=>c.id===activeCatId);
+  document.getElementById('catDesc').textContent = activeCat.desc;
+}
+function switchCategory(id){ activeCatId = id; renderCategoryNav(); renderItemsGrid(); }
+
+function renderItemsGrid(){
+  const root = document.getElementById('categoriesRoot');
+  root.innerHTML = '';
+  const cat = CATEGORIES.find(c=>c.id===activeCatId);
+  cat.items.forEach((name, idx)=>{
+    const meta = (PRICES[name] && PRICES[name].hidden) ? null : buildItemRow(cat, name, idx);
+    if(meta) root.appendChild(meta);
+  });
+}
+function renderCategories(){ renderCategoryNav(); renderItemsGrid(); }
+
+function priceTagHTML(name){
+  const p = PRICES[name] && PRICES[name].price;
+  if(p === undefined || p === null || p === '') return `<span class="item-price unset">السعر يتحدد قريبًا</span>`;
+  return `<span class="item-price">${p} جنيه</span>`;
+}
+
+function buildItemRow(cat, name, idx){
+  const wrap = document.createElement('div');
+  wrap.className = 'item';
+  const kind = iconKind(cat, name);
+  const color = ITEM_COLOR[name] || '#B98A3E';
+
+  const top = document.createElement('div');
+  top.className = 'item-top';
+  top.innerHTML = `
+    <div class="item-text">
+      <span class="item-name">${name}</span>
+      <span class="item-sub">${cat.title}</span>
+      ${priceTagHTML(name)}
+    </div>
+    <div class="item-thumb" style="background:${hexToRgba(color,.16)}">${drinkIconSVG(kind, color)}</div>
+  `;
+  wrap.appendChild(top);
+
+  const btn = document.createElement('button');
+  btn.className = 'add-btn';
+  btn.textContent = 'إضافة';
+  btn.onclick = ()=> wrap.classList.toggle('expanded');
+  wrap.appendChild(btn);
+
+  const opts = document.createElement('div');
+  opts.className = 'item-options';
+  const sugarList = cat.id === 'coffee' ? SUGAR_COFFEE : SUGAR_SIMPLE;
+  const qtyState = { qty:1, mixList:[], sugar: sugarList[0], extras:{} };
+
+  const qtyLine = document.createElement('div');
+  qtyLine.className = 'row-line';
+  qtyLine.innerHTML = `<span class="field-label">الكمية</span><div class="stepper"><button type="button">−</button><span class="qty-val">1</span><button type="button">+</button></div>`;
+  const qtySpan = qtyLine.querySelector('.qty-val');
+  const [minusBtn, plusBtn] = qtyLine.querySelectorAll('button');
+  const MAX_QTY = 10;
+  minusBtn.onclick = ()=>{ if(qtyState.qty>1){ qtyState.qty--; qtySpan.textContent=qtyState.qty; } };
+  plusBtn.onclick = ()=>{
+    if(qtyState.qty<MAX_QTY){ qtyState.qty++; qtySpan.textContent=qtyState.qty; }
+    else{ toast('الحد الأقصى للطلب 10 من نفس الصنف'); }
+  };
+  opts.appendChild(qtyLine);
+
+  if(ITEM_MIX_CONFIG[name]){
+    const cfg = ITEM_MIX_CONFIG[name];
+    const mixLine = document.createElement('div');
+    mixLine.className = 'row-line';
+    mixLine.style.flexDirection = 'column';
+    mixLine.style.alignItems = 'flex-start';
+    const label = cfg.max>1 ? `مزيج مع (حتى ${cfg.max} إضافات)` : 'مزيج مع';
+    mixLine.innerHTML = `<span class="field-label">${label}</span><div class="mix-chips">${cfg.options.map(h=>`<span class="mix-chip" data-val="${h}">${h}</span>`).join('')}</div>`;
+    mixLine.querySelectorAll('.mix-chip').forEach(chip=>{
+      chip.onclick = ()=>{
+        const val = chip.dataset.val;
+        const i = qtyState.mixList.indexOf(val);
+        if(i>-1){ qtyState.mixList.splice(i,1); chip.classList.remove('selected'); }
+        else {
+          if(qtyState.mixList.length >= cfg.max){ toast(cfg.max===1 ? 'اختر مزيج واحد بس' : `أقصى مزيج ${cfg.max} إضافات`); return; }
+          qtyState.mixList.push(val); chip.classList.add('selected');
+        }
+      };
+    });
+    opts.appendChild(mixLine);
   }
 
-  // قاعدة بيانات الأعضاء المحدثة بناءً على طلبك
-  const REGISTERED_TEAM = [
-    { name: "مظهر علي", phone: "01021776980", pin: "1234" },
-    { name: "حسن ابو عمر", phone: "01220522806", pin: "2222" },
-    { name: "كريم احمد", phone: "01200615796", pin: "3333" }
-  ];
- // دالة الاستماع وتحديث حالات الفريق في فايربيز لمعرفتها مباشرة
-  function listenTeamStatus() {
-    fs.onSnapshot(fs.collection(db, 'team_status'), (snapshot) => {
-      const statuses = {};
-      snapshot.forEach(docSnap => {
-        statuses[docSnap.id] = docSnap.data();
-      });
-
-      const listEl = document.getElementById('teamStatusList');
-      if(!listEl) return;
-      listEl.innerHTML = '';
-
-      REGISTERED_TEAM.forEach(member => {
-        const isOnline = statuses[member.phone] && statuses[member.phone].online === true;
-        
-        const row = document.createElement('div');
-        row.style.cssText = "display:flex; align-items:center; justify-content:space-between; background:var(--panel-2, #F6F1E4); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; font-weight:700;";
-        
-        row.innerHTML = `
-          <span>${member.name}</span>
-          <div style="display:flex; align-items:center; gap:6px; font-size:11.5px;">
-            <span style="width:9px; height:9px; border-radius:50%; background:${isOnline ? '#2be374' : '#111111'}; box-shadow:${isOnline ? '0 0 8px #2be374' : 'none'}; display:inline-block;"></span>
-            <span style="color:${isOnline ? 'var(--gold-dark)' : '#555'};">${isOnline ? 'متواجد' : 'غير متواجد'}</span>
-          </div>
-        `;
-        listEl.appendChild(row);
-      });
+  if(ITEM_EXTRA_CONFIG[name]){
+    ITEM_EXTRA_CONFIG[name].forEach(cfg=>{
+      qtyState.extras[cfg.key] = cfg.options[0];
+      const extraLine = document.createElement('div');
+      extraLine.className = 'row-line';
+      extraLine.innerHTML = `<span class="field-label">${cfg.label}</span><select>${cfg.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+      extraLine.querySelector('select').onchange = (e)=>{ qtyState.extras[cfg.key] = e.target.value; };
+      opts.appendChild(extraLine);
     });
   }
 
-  // تشغيل الدالة عند تحميل الصفحة
-  listenTeamStatus();
-  // فحص حالة الجلسة الحالية للمستخدم
-  const currentPhone = localStorage.getItem('teamPhone');
-  if(currentPhone){
-    const member = REGISTERED_TEAM.find(m => m.phone === currentPhone);
-    if(member){
-      document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('dashboardView').style.display = 'block';
-      document.getElementById('welcomeMsg').textContent = `أهلاً بك يا ${member.name} (متواجد حالياً)`;
+  const sugarLine = document.createElement('div');
+  sugarLine.className = 'row-line';
+  sugarLine.innerHTML = `<span class="field-label">درجة السكر</span><select>${sugarList.map(s=>`<option value="${s}">${s}</option>`).join('')}</select>`;
+  sugarLine.querySelector('select').onchange = (e)=>{ qtyState.sugar = e.target.value; };
+  opts.appendChild(sugarLine);
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.className = 'confirm-add';
+  confirmBtn.textContent = 'أضف للسلة';
+  confirmBtn.onclick = ()=>{
+    let fullName = qtyState.mixList.length ? (name + ' مع ' + qtyState.mixList.join('، ')) : name;
+    const extraStr = Object.values(qtyState.extras).filter(Boolean).join('، ');
+    const existing = cart.find(i => i.name === fullName && i.sugar === qtyState.sugar && (i.extra||'') === extraStr);
+    if(existing){
+      const newQty = Math.min(MAX_QTY, existing.qty + qtyState.qty);
+      if(newQty === existing.qty){ toast('وصلت للحد الأقصى (10) من ' + fullName); }
+      else { existing.qty = newQty; toast(fullName + ' — الكمية الآن ' + existing.qty); }
+    } else {
+      cart.push({ uid: uid(), category: cat.title, name: fullName, qty: qtyState.qty, sugar: qtyState.sugar, extra: extraStr });
+      toast(fullName + ' أُضيف للسلة');
     }
+    renderCartPanel();
+    wrap.classList.remove('expanded');
+    qtyState.qty = 1; qtyState.mixList = []; qtySpan.textContent = '1';
+    opts.querySelectorAll('.mix-chip.selected').forEach(c=>c.classList.remove('selected'));
+  };
+  opts.appendChild(confirmBtn);
+  wrap.appendChild(opts);
+  return wrap;
+}
+
+function renderCartPanel(){
+  const panel = document.getElementById('cartPanel');
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartCountPill').textContent = count;
+  panel.classList.toggle('has-items', count>0);
+  if(count>0) panel.classList.add('open');
+
+  const linesRoot = document.getElementById('cartLines');
+  if(!cart.length){
+    linesRoot.innerHTML = `<div class="cart-empty-msg">سلتك فارغة — اختر مشروبك من الأقسام بالأسفل</div>`;
+  } else {
+    linesRoot.innerHTML = '';
+    cart.forEach(item=>{
+      const meta = [item.category, item.extra, item.sugar].filter(Boolean).join(' · ');
+      const line = document.createElement('div');
+      line.className = 'cart-line';
+      line.innerHTML = `<div style="flex:1"><div class="cart-line-name">${item.name}</div><div class="cart-line-meta">${meta}</div></div><span class="cart-line-qty">×${item.qty}</span><button class="cart-line-x" title="حذف">×</button>`;
+      line.querySelector('.cart-line-x').onclick = ()=>{ cart = cart.filter(i=>i.uid!==item.uid); renderCartPanel(); };
+      linesRoot.appendChild(line);
+    });
   }
+  document.getElementById('sendOrderBtn').disabled = cart.length===0;
+}
+document.getElementById('cartPanelHead').addEventListener('click', ()=>{
+  document.getElementById('cartPanel').classList.toggle('open');
+});
 
-  // زر تسجيل الدخول
-  document.getElementById('loginBtn').onclick = async () => {
-    const phone = document.getElementById('whatsappInput').value.trim();
-    const pin = document.getElementById('pinInput').value.trim();
+async function initFirestore(){
+  const cfgMod = await import('./firebase-config.js');
+  db = cfgMod.db;
+  fs = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
-    const member = REGISTERED_TEAM.find(m => m.phone === phone && m.pin === pin);
-    if(!member){
-      toast('رقم الواتساب أو الرقم السري غير صحيح!');
+  fs.onSnapshot(fs.doc(db,'prices','menu'), (snap)=>{
+    PRICES = snap.exists() ? snap.data() : {};
+    renderItemsGrid();
+  });
+
+  // الاستماع للطلبات الجديدة لعرض الإشعارات للفريق
+  fs.onSnapshot(fs.query(fs.collection(db,'orders'), fs.where('status','==','pending')), (snap)=>{
+    const badge = document.getElementById('bellBadge');
+    badge.textContent = snap.size;
+    badge.style.display = snap.size>0 ? 'flex' : 'none';
+  });
+
+  updateTeamBellVisibility();
+}
+
+function updateTeamBellVisibility(){
+  const me = localStorage.getItem('teamMember');
+  const isTeam = me && TEAM.some(t=>t.name===me);
+  document.getElementById('teamBellBtn').classList.toggle('show', !!isTeam);
+}
+
+// عند الضغط على جرس الإشعارات، تفتح نافذة عرض الطلبات الواردة للفريق
+document.getElementById('teamBellBtn').onclick = ()=>{
+  const body = document.getElementById('teamOrdersBody');
+  body.innerHTML = '<p>جاري جلب الطلبات الواردة...</p>';
+  document.getElementById('teamOrdersOverlay').classList.add('show');
+
+  fs.getDocs(fs.query(fs.collection(db,'orders'), fs.where('status','==','pending'))).then((snap)=>{
+    if(snap.empty){
+      body.innerHTML = '<p style="text-align:center; color:var(--cream-dim);">لا توجد طلبات معلقة حالياً ✅</p>';
       return;
     }
+    body.innerHTML = '';
+    snap.forEach(docSnap=>{
+      const o = docSnap.data();
+      const id = docSnap.id;
+      const div = document.createElement('div');
+      div.className = 'order-card-mini';
+      let itemsHTML = (o.items||[]).map(i=>`• ${i.name} ×${i.qty} ${i.sugar?`(${i.sugar})`:''}`).join('<br>');
+      div.innerHTML = `
+        <div class="head"><span>العميل: ${o.customer}</span><span>⏳ قيد الانتظار</span></div>
+        <div class="items">${itemsHTML}</div>
+        ${o.note?`<div style="font-size:11.5px; color:var(--cream-dim); margin-bottom:6px;">ملاحظات: ${o.note}</div>`:''}
+        <button onclick="acceptOrderFromHome('${id}')">قبول وبدء التجهيز ☕</button>
+      `;
+      body.appendChild(div);
+    });
+  }).catch(err=>{
+    body.innerHTML = '<p style="color:var(--bad);">حدث خطأ أثناء تحميل الطلبات.</p>';
+  });
+};
 
-    try {
-      // 1. تحديث حالة الاتصال في فايربيز (متواجد)
-      await fs.setDoc(fs.doc(db, 'team_status', member.phone), {
-        name: member.name,
-        online: true,
-        lastLogin: fs.serverTimestamp()
-      }, { merge: true });
+window.acceptOrderFromHome = async function(id){
+  try{
+    await fs.updateDoc(fs.doc(db, 'orders', id), { status: 'preparing' });
+    toast('تم قبول الطلب وجاري تجهيزه');
+    closeOverlay('teamOrdersOverlay');
+  }catch(e){
+    toast('حدث خطأ أثناء قبول الطلب');
+  }
+};
 
-      // 2. حفظ البيانات محلياً
-      localStorage.setItem('teamMember', member.name);
-      localStorage.setItem('teamPhone', member.phone);
+async function sendOrder(){
+  if(!cart.length){ toast('السلة فارغة'); return; }
+  const custName = document.getElementById('custName').value.trim() || 'عميل';
+  const custNote = document.getElementById('custNote').value.trim();
+  const items = cart.map(i=>({name:i.name, qty:i.qty, sugar:i.sugar, extra:i.extra||'', category:i.category}));
 
-      // 3. إرسال إشعار الواتساب
-      const whatsappMsg = `مرحباً ${member.name}، تم تسجيل دخولك بنجاح إلى نظام بوفيه الزاوية شميس.`;
-      const waLink = `https://wa.me/2${member.phone}?text=${encodeURIComponent(whatsappMsg)}`;
-      
-      toast('تم تسجيل الدخول بنجاح! جاري إرسال إشعار الواتساب...');
-      
-      setTimeout(() => {
-        window.open(waLink, '_blank');
-        window.location.href = 'index.html';
-      }, 1200);
+  try{
+    await fs.addDoc(fs.collection(db,'orders'), {
+      customer: custName, note: custNote, items,
+      status:'pending', claimedBy:null, claimedAt:null, history:[],
+      createdAt: fs.serverTimestamp()
+    });
+    toast('تم إرسال الطلب للبوفيه بنجاح! 🛎️');
+    cart = [];
+    renderCartPanel();
+    document.getElementById('custName').value='';
+    document.getElementById('custNote').value='';
+  }catch(e){
+    console.error('Firestore order error:', e);
+    toast('حدث خطأ في حفظ الطلب، تأكد من الاتصال');
+  }
+}
+document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
+document.getElementById('decorOrderDirectBtn').addEventListener('click', ()=>{
+  window.scrollTo({ top: document.getElementById('cartPanel').offsetTop - 20, behavior: 'smooth' });
+});
 
-    } catch (e) {
-      console.error(e);
-      toast('حدث خطأ في الاتصال بقاعدة البيانات');
-    }
-  };
+const INFO_CONTENT = {
+  policy: { title:'سياسة الاستخدام', body:`<p>التطبيق مخصص لطلب المشروبات مباشرة من بوفيه الزاوية شميس.</p><p>يقوم العميل باختيار المشروبات وإرسالها لتظهر فوراً في صندوق إشعارات فريق العمل.</p>` },
+  terms: { title:'الشروط والأحكام', body:`<p>الأسعار والتوافر قابلان للتغيير حسب المتاح في البوفيه وقت الطلب.</p>` },
+  support: { title:'خدمة العملاء', body:`<p>إدارة البوفيه: <b>${MANAGER.name}</b></p><p>البريد الإلكتروني: <a href="mailto:abdeenali520@gmail.com" style="color:var(--gold-dark);font-weight:700">abdeenali520@gmail.com</a></p>` },
+};
+function showInfo(type){
+  const info = INFO_CONTENT[type];
+  if(!info) return;
+  document.getElementById('infoTitle').textContent = info.title;
+  document.getElementById('infoBody').innerHTML = info.body;
+  document.getElementById('infoOverlay').classList.add('show');
+}
 
-  // زر تسجيل الخروج
-  document.getElementById('logoutBtn').onclick = async () => {
-    const phone = localStorage.getItem('teamPhone');
-    if(phone){
-      try {
-        await fs.setDoc(fs.doc(db, 'team_status', phone), {
-          online: false,
-          lastLogout: fs.serverTimestamp()
-        }, { merge: true });
-      } catch(e){}
-    }
-    localStorage.removeItem('teamMember');
-    localStorage.removeItem('teamPhone');
-    toast('تم تسجيل الخروج بنجاح');
-    setTimeout(()=> location.reload(), 1000);
-  };
+const footerYearEl = document.getElementById('footerYear');
+if(footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 
-  listenTeamStatus();
+renderCategories();
+renderCartPanel();
+updateTeamBellVisibility();
+initFirestore();
 </script>
 </body>
 </html>
