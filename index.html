@@ -556,7 +556,7 @@ async function sendOrder(){
   const online = await getOnlineMembers();
   const body = document.getElementById('pickerBody');
   body.innerHTML = '';
-  if(!online.length) {
+ if(!online.length) {
     body.innerHTML = `<div class="picker-empty">مفيش حد من الفريق متواجد دلوقتي – هيتوصل طلبك لمظهر علي مباشرة.</div>`;
     const b = document.createElement('button');
     b.className = 'staff-pick-btn';
@@ -564,7 +564,6 @@ async function sendOrder(){
     const mazharManager = { name: 'مظهر علي' };
     b.onclick = () => { closeOverlay('pickerOverlay'); finalizeSendOrder(mazharManager); };
     body.appendChild(b);
-}
 }
   } else {
     online.forEach(m=>{
