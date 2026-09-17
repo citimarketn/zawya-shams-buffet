@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شعار الزاوية شميس</title>
+    <!-- استدعاء خط أنيق يتناسب مع التصميم -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* حاوية الخلفية الخضراء الرئيسية */
+        .logo-container {
+            background-color: #3f5243; /* اللون الأخضر الداكن */
+            width: 350px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        /* الإطار الداخلي المقوس بالأبيض */
+        .logo-frame {
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-radius: 120px / 160px; /* يعطي شكل القوس من الأعلى والأسفل */
+            width: 240px;
+            padding: 45px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* أيقونة فنجان القهوة والبخار (SVG) */
+        .logo-icon img, .logo-icon svg {
+            width: 75px;
+            height: 75px;
+            fill: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        /* نصوص الشعار */
+        .logo-text {
+            color: #ffffff;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            line-height: 1.2;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            display: block;
+            font-size: 26px;
+            margin-top: 2px;
+        }
+
+        /* عبارة Coffee Shop في الأسفل خارج الإطار المقوس */
+        .sub-title {
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <!-- الإطار المقوس -->
+        <div class="logo-frame">
+            
+            <!-- أيقونة فنجان القهوة مع البخار -->
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" width="100%" height="100%">
+                    <path d="M18.5 7h-1.07c-.37-2.07-2.17-3.5-4.43-3.5-2.26 0-4.06 1.43-4.43 3.5H5.5C4.12 7 3 8.12 3 9.5v1c0 2.21 1.45 4.09 3.48 4.75C7.55 16.5 9.4 18 12 18s4.45-1.5 5.52-2.75C19.55 14.59 21 12.71 21 10.5v-1c0-1.38-1.12-2.5-2.5-2.5zm-13 3.5h1.16c.15 1.5.85 2.8 1.9 3.76C6.96 13.9 5.86 12.43 5.5 10.5zm12 0c-.36 1.93-1.46 3.4-3.06 3.76 1.05-.96 1.75-2.26 1.9-3.76h1.16zM12 16.5c-2.1 0-3.75-1.3-4.2-3h8.4c-.45 1.7-2.1 3-4.2 3zm6.5-6h-15v-1c0-.55.45-1 1-1h13c.55 0 1 .45 1 1v1zm-6-9c1.66 0 3 1.34 3 3 0 .74-.27 1.42-.72 1.94-.48-.91-1.42-1.54-2.52-1.64-1.3-.12-2.38-.95-2.76-2.11C10.02 2.68 10.95 1.5 12 1.5zm-2.11 5.39c.35.79 1.11 1.36 2.01 1.45.69.07 1.32.37 1.8.82-.41.56-1.07.93-1.83.93-1.24 0-2.27-.92-2.45-2.12-.1-.66.14-1.31.48-1.08z"/>
+                </svg>
+            </div>
+
+            <!-- النصوص -->
+            <div class="logo-text">
+                -Al
+                <span>Zawiya</span>
+                <span>Coffee</span>
+            </div>
+
+        </div>
+
+        <!-- عبارة الأسفل -->
+        <div class="sub-title">Coffee Shop</div>
+    </div>
+
+</body>
+</html>
