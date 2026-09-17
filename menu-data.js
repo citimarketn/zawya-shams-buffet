@@ -5,33 +5,47 @@
    لازم يتحمّل بـ <script src="menu-data.js"></script> قبل أي سكريبت تاني.
    ============================================================ */
 
+
+GROUP8_ITEMS.forEach(item=>{
+  ITEM_MIX_CONFIG[item] = { options: GROUP8_ITEMS.filter(x=>x!==item), max: 4 };
+});
+/*
+  menu-data.js > بيانات المنيو والفريق - ملف واحد مشترك بين index.html و team.html
+------------------------------------------------------------
+*/
+
 const TEAM = [
-  { name:'مظهر علي',   phone:'201021776980' },
-  { name:'حسن ابو عمر', phone:'201220522806' },
-  { name:'كريم محمد',   phone:'201200615769' },
+  { name: 'مظهر علي', phone: '201021776980' },
+  { name: 'حسن أبو عمر', phone: '201220522806' },
+  { name: 'كريم محمد', phone: '201280615769' }
 ];
-const MANAGER = { name: 'حسن ابو عمر', phone: '201220522806' };
 
-// الاسمين المسموح لهم وحدهم بتعديل الأسعار وإخفاء/تعديل/حذف المنتجات
-const PRICE_EDITOR_NAMES = ['حسن ابو عمر', 'مظهر علي'];
+const MANAGER = { name: 'حسن أبو عمر', phone: '201220522806' };
 
-const SUGAR_COFFEE = ['بدون سكر/سادة','مظبوط','مانو','زيادة','زيادة حلواني'];
-const SUGAR_SIMPLE = ['سكر مظبوط','سكر زيادة','سكر بره'];
+/* الأسمين المسموح لهم بتعديل الأسعار وإخفاء/تعديل/حذف المنتجات */
+const PRICE_EDITOR_NAMES = ['مظهر علي', 'حسن أبو عمر'];
 
-const TEA_MIX_POOL = ['حليب','لمون','نعناع','قرنفل'];
-const GROUP8_ITEMS = ['ينسون','قرفة','زنجبيل','لمون سخن','نعناع','كمون','شعير','كراوية'];
+const SUGAR_COFFEE = ['زيادة حلواتي', 'زيادة', 'مبوط', 'بدون سكر/مادة'];
+const SUGAR_SIMPLE = ['سكر بره', 'سكر زيادة', 'سكر مظبوط'];
+
+const TEA_MIX_POOL = ['قرنفل', 'نعناع', 'لمون', 'حليب'];
+const GROUPS_ITEMS = ['كراوية', 'سعتر', 'كمون', 'نعناع', 'لمون سخن', 'رعشيل', 'قرفه', 'انسون'];
 
 const ITEM_MIX_CONFIG = {
   'شاي سادة': { options: TEA_MIX_POOL, max: 4 },
   'شاي فتلة ليبتون': { options: TEA_MIX_POOL, max: 4 },
   'شاي فتلة عروسة': { options: TEA_MIX_POOL, max: 4 },
-  'شاي أخضر': { options: TEA_MIX_POOL, max: 4 },
-  'لمون ساقع': { options: ['نعناع','لبن'], max: 1 },
+  'شاي أحمر': { options: TEA_MIX_POOL, max: 4 },
+  'لمون ساقع': { options: ['لمون', 'نعناع'], max: 1 }
 };
-GROUP8_ITEMS.forEach(item=>{
-  ITEM_MIX_CONFIG[item] = { options: GROUP8_ITEMS.filter(x=>x!==item), max: 4 };
+
+GROUPS_ITEMS.forEach(item=>{
+  ITEM_MIX_CONFIG[item] = { options: GROUPS_ITEMS.filter(x=>x!==item), max: 4 };
 });
 
+const ITEM_EXTRA_CONFIG = {
+  'حليب': { key: 'milk', label: 'حليب', options: ['حليب سادة', 'حليب متبل'] }
+};
 const ITEM_EXTRA_CONFIG = {
   'كاكاو': [ {key:'milk', label:'الحليب', options:['حليب كامل','نص حليب']} ],
   'هوت شوكلت': [ {key:'milk', label:'الحليب', options:['حليب كامل','نص حليب']} ],
